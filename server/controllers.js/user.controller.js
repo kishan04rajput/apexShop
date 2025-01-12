@@ -3,10 +3,13 @@ import {
     compareUserPasswordSvc,
     createHashedPasswordSvc,
     createNewUserSvc,
-    decodeUserJwtTokenSvc,
     saveUserRefreshTokenSvc,
     userProfileUpdateSvc,
 } from "../services/user/user.svc.js";
+import {
+    handleErrorResponse,
+    handleSuccessResponse,
+} from "../utilis/session.utili.js";
 
 export const signupController = async (req, res) => {
     try {
@@ -72,21 +75,10 @@ export const loginController = async (req, res) => {
 };
 
 export const getUserDetailsController = async (req, res) => {
-    const cookieValue = req?.cookies?.ApexShopAccessToken;
-    if (!cookieValue) {
-        return res.status(404).send("Please Login!");
-    }
-    let { email } = await decodeUserJwtTokenSvc(
-        cookieValue,
-        process.env.ACCESS_TOKEN_SECRET
-    );
-    if (!email) {
-        return res.status(404).send("User Not Found!");
-    }
-    let user = await checkIfUserExistSvc(email);
+    let user = req.user;
 
     if (!user) {
-        return res.status(404).send("User not found!");
+        return handleErrorResponse(res, 404, "User not found!");
     }
     const {
         password,
@@ -98,21 +90,11 @@ export const getUserDetailsController = async (req, res) => {
         ...otherDetails
     } = user._doc;
 
-    return res.status(200).json(otherDetails);
+    return handleSuccessResponse(res, 200, "success", otherDetails);
 };
 
 export const userProfileUpdateController = async (req, res) => {
-    const cookieValue = req?.cookies?.ApexShopAccessToken;
-    if (!cookieValue) {
-        return res.status(404).send("Please Login!");
-    }
-    let { email } = await decodeUserJwtTokenSvc(
-        cookieValue,
-        process.env.ACCESS_TOKEN_SECRET
-    );
-    if (!email) {
-        return res.status(404).send("User Not Found!");
-    }
+    let email = req?.user?.email;
     let updatedData = req.body;
     let response = await userProfileUpdateSvc(email, updatedData);
     if (response.error) {
@@ -120,31 +102,25 @@ export const userProfileUpdateController = async (req, res) => {
         return res.status(404).json({ error: response.error });
     }
 
-    return res.status(200).json({ updatedData });
+    return res.status(200).json(updatedData);
 };
 
 export const userUpdatePassword = async (req, res) => {
-    const cookieValue = req?.cookies?.ApexShopAccessToken;
-    if (!cookieValue) {
-        return res.status(404).send("Please login!");
-    }
-    const { email } = await decodeUserJwtTokenSvc(
-        cookieValue,
-        process.env.ACCESS_TOKEN_SECRET
-    );
-    if (!email) {
-        return res.status(404).send("User Not Found!");
-    }
+    let email = req?.user?.email;
     const myPlaintextPassword = req?.body?.password;
-    const [hashedPassword, salt] = await createHashedPasswordSvc(
-        myPlaintextPassword
-    );
+    try {
+        const [hashedPassword, salt] = await createHashedPasswordSvc(
+            myPlaintextPassword
+        );
 
-    let updatedData = {
-        password: hashedPassword,
-        salt,
-    };
-    await userProfileUpdateSvc(email, updatedData);
-
-    res.status(200).json({ msg: "password updated" });
+        let updatedData = {
+            password: hashedPassword,
+            salt,
+        };
+        await userProfileUpdateSvc(email, updatedData);
+        return handleSuccessResponse(res, 200, "password updated", null);
+    } catch (err) {
+        console.log(err);
+        return handleErrorResponse(res, 500, err);
+    }
 };

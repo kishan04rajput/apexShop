@@ -51,7 +51,10 @@ export const userProfileUpdateSvc = async (email, updatedData) => {
 
     updatedData.phone ? (user.phone = updatedData.phone) : null;
     updatedData.name ? (user.name = updatedData.name) : null;
-    updatedData.password ? (user.password = updatedData.password) : null;
+    updatedData.password
+        ? ((user.password = updatedData.password),
+          user.oldPassword.push({ password: user.password, salt: user.salt }))
+        : null;
     updatedData.salt ? (user.salt = updatedData.salt) : null;
     updatedData.created_by ? (user.created_by = updatedData.created_by) : null;
     updatedData.updated_by ? (user.updated_by = updatedData.updated_by) : null;
