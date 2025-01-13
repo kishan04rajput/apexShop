@@ -3,28 +3,25 @@ import {
     checkIfUserExistSvc,
     decodeUserJwtTokenSvc,
 } from "../services/user/user.svc.js";
+import { responseUtili } from "../utilities/response.utilis.js";
 
 export const authenticationMiddleware = async (req, res, next) => {
-    const cookieValue = req?.cookies?.ApexShopAccessToken;
-    if (!cookieValue) {
-        return res.status(404).send("Please Login!");
+    const token = req?.headers?.apexshopaccesstoken || null;
+    if (!token) {
+        return responseUtili(res, 404, "failed", "Please Login!", "No Token!");
     }
+
     let { email } = await decodeUserJwtTokenSvc(
-        cookieValue,
+        token,
         process.env.ACCESS_TOKEN_SECRET
     );
     if (!email) {
-        return res.status(404).send("User Not Found!");
+        return responseUtili(res, 404, "failed", "User Not Found!");
     }
 
-    let user = await getUserFromCache(email);
+    let user = await checkIfUserExistSvc(email);
     if (!user) {
-        user = await checkIfUserExistSvc(email);
-        if (!user) {
-            return res.status(404).send("User not found!");
-        }
-
-        await setUserInCache(user);
+        return responseUtili(res, 404, "failed", "User Not Found!");
     }
 
     req.user = user;

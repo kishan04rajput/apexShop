@@ -7,34 +7,36 @@ import {
     userProfileUpdateSvc,
 } from "../services/user/user.svc.js";
 import {
-    handleErrorResponse,
-    handleSuccessResponse,
-} from "../utilis/session.utili.js";
+    generateAccessToken,
+    generateRefreshToken,
+} from "../utilities/jwt.utilis.js";
+import { responseUtili } from "../utilities/response.utilis.js";
 
 export const signupController = async (req, res) => {
-    try {
-        const myPlaintextPassword = req?.body?.password;
-        const email = req?.body?.email;
+    const myPlaintextPassword = req?.body?.password;
+    const email = req?.body?.email;
 
-        let isUserExist = await checkIfUserExistSvc(email);
-        if (isUserExist) {
-            res.status(409).json({
-                msg: "user already exist in system",
-                status: "failed",
-            });
-            return;
-        }
+    let isUserExist = await checkIfUserExistSvc(email);
 
-        const [hashedPassword, salt] = await createHashedPasswordSvc(
-            myPlaintextPassword
+    if (isUserExist) {
+        return responseUtili(
+            res,
+            409,
+            "failed",
+            "user already exist in system"
         );
-
-        await createNewUserSvc(email, hashedPassword, salt);
-
-        res.status(200).send("User created successfully!");
-    } catch (e) {
-        res.send(e);
     }
+
+    const [hashedPassword, salt] = await createHashedPasswordSvc(
+        myPlaintextPassword
+    );
+
+    const response = await createNewUserSvc(email, hashedPassword, salt);
+    if (!response) {
+        return responseUtili(res, 409, "failed", "internal server error!");
+    }
+
+    return responseUtili(res, 200, "success", "User created successfully!");
 };
 
 export const loginController = async (req, res) => {
@@ -43,7 +45,7 @@ export const loginController = async (req, res) => {
 
     const user = await checkIfUserExistSvc(email);
     if (!user) {
-        return res.status(404).send("No user found!");
+        return responseUtili(res, 404, "failed", "No user found!");
     }
 
     const isPasswordCorrect = await compareUserPasswordSvc(
@@ -52,13 +54,11 @@ export const loginController = async (req, res) => {
     );
 
     if (!isPasswordCorrect) {
-        return res.status(401).send("Wrong password!");
+        return responseUtili(res, 401, "failed", "Wrong password!");
     }
 
-    const accessToken = await user.generateAccessToken();
-    const refreshToken = await user.generateRefreshToken();
-
-    await saveUserRefreshTokenSvc(user, refreshToken);
+    const accessToken = generateAccessToken(user._id, user.email, 2);
+    const refreshToken = generateRefreshToken(user._id);
 
     const {
         password,
@@ -69,16 +69,20 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = user._doc;
-    res.cookie("ApexShopAccessToken", accessToken)
-        .status(200)
-        .json({ ...otherDetails });
+    return responseUtili(
+        res,
+        200,
+        "user loggedin",
+        { ...otherDetails },
+        { ApexShopAccessToken: accessToken }
+    );
 };
 
 export const getUserDetailsController = async (req, res) => {
     let user = req.user;
 
     if (!user) {
-        return handleErrorResponse(res, 404, "User not found!");
+        return responseUtili(res, 404, "failed!", "User not found!");
     }
     const {
         password,
@@ -90,7 +94,7 @@ export const getUserDetailsController = async (req, res) => {
         ...otherDetails
     } = user._doc;
 
-    return handleSuccessResponse(res, 200, "success", otherDetails);
+    return responseUtili(res, 200, "success", otherDetails);
 };
 
 export const userProfileUpdateController = async (req, res) => {
@@ -98,11 +102,12 @@ export const userProfileUpdateController = async (req, res) => {
     let updatedData = req.body;
     let response = await userProfileUpdateSvc(email, updatedData);
     if (response.error) {
-        console.log(response.error);
-        return res.status(404).json({ error: response.error });
+        // console.log(response.error);
+        return responseUtili(res, 404, "failed", response.error);
+        // return res.status(404).json({ error: response.error });
     }
 
-    return res.status(200).json(updatedData);
+    return responseUtili(res, 200, "success", updatedData);
 };
 
 export const userUpdatePassword = async (req, res) => {
@@ -117,10 +122,24 @@ export const userUpdatePassword = async (req, res) => {
             password: hashedPassword,
             salt,
         };
-        await userProfileUpdateSvc(email, updatedData);
-        return handleSuccessResponse(res, 200, "password updated", null);
+        let response = await userProfileUpdateSvc(email, updatedData);
+        if (!response) {
+            return responseUtili(
+                res,
+                500,
+                "error",
+                "An unexpected error occurred"
+            );
+        }
+        return responseUtili(res, 200, "success", "password updated");
     } catch (err) {
         console.log(err);
-        return handleErrorResponse(res, 500, err);
+        return responseUtili(
+            res,
+            500,
+            "error",
+            "An unexpected error occurred",
+            `error---->${err}`
+        );
     }
 };

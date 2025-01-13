@@ -11,7 +11,7 @@ export const setUserInCache = async (user) => {
 
     let key = getUserCacheKey(user.email);
     await client.set(key, stringifiedUser);
-    await client.expire(key, 600); // TODO: Get expiry time from .env
+    await client.expire(key, process.env.CACHE_TTL); // TODO: Get expiry time from .env
 };
 
 export const getUserFromCache = async (email) => {

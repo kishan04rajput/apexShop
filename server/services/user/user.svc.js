@@ -2,15 +2,31 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import {
+    convertToUserDBObj,
     createNewUserDB,
     findUserUsingEmailDB,
     saveUserRefreshTokenDB,
     userProfielUpdateDB,
 } from "../../db/user/user.db.js";
-import userModel from "../../models/user.model.js";
+import { getUserModel } from "../../models/user.model.js";
+import {
+    getUserFromCache,
+    setUserInCache,
+} from "../../cache/user/user.cache.js";
+import { responseUtili } from "../../utilities/response.utilis.js";
 
 export const checkIfUserExistSvc = async (email) => {
-    return await findUserUsingEmailDB(email);
+    let user = await getUserFromCache(email);
+    if (!user) {
+        user = await findUserUsingEmailDB(email);
+        if (!user) {
+            return null;
+        }
+
+        await setUserInCache(user);
+    }
+    user = convertToUserDBObj(user);
+    return user;
 };
 
 export const createHashedPasswordSvc = async (password) => {
@@ -20,6 +36,7 @@ export const createHashedPasswordSvc = async (password) => {
 };
 
 export const createNewUserSvc = async (email, password, salt) => {
+    const userModel = await getUserModel();
     const newUser = new userModel({
         email,
         password,
@@ -36,10 +53,11 @@ export const compareUserPasswordSvc = async (userPassword, dbPassword) => {
 
 export const saveUserRefreshTokenSvc = async (user, refreshToken) => {
     user.refreshToken = refreshToken;
-    await saveUserRefreshTokenDB(user);
+    return await saveUserRefreshTokenDB(user);
 };
 
 export const decodeUserJwtTokenSvc = async (jwtToken, key) => {
+    // TODO: change name to suitable name which can justify it's function
     return jwt.verify(jwtToken, key);
 };
 
