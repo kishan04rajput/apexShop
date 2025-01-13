@@ -1,11 +1,11 @@
 import {
     checkIfUserExistSvc,
     compareUserPasswordSvc,
-    createHashedPasswordSvc,
     createNewUserSvc,
     saveUserRefreshTokenSvc,
     userProfileUpdateSvc,
 } from "../services/user/user.svc.js";
+import { createHashedPasswordUtil } from "../utilities/createHashedPassword.util.js";
 import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
 import { handleSuccessResUtil } from "../utilities/handleSuccessRes.utilis.js";
 import {
@@ -28,7 +28,7 @@ export const signupController = async (req, res) => {
         );
     }
 
-    const [hashedPassword, salt] = await createHashedPasswordSvc(
+    const [hashedPassword, salt] = await createHashedPasswordUtil(
         myPlaintextPassword
     );
 
@@ -120,7 +120,7 @@ export const userUpdatePassword = async (req, res) => {
     let email = req?.user?.email;
     const myPlaintextPassword = req?.body?.password;
     try {
-        const [hashedPassword, salt] = await createHashedPasswordSvc(
+        const [hashedPassword, salt] = await createHashedPasswordUtil(
             myPlaintextPassword
         );
 

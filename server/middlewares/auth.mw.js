@@ -15,7 +15,7 @@ export const authenticationMiddleware = async (req, res, next) => {
 
     let { email } = await decodeUserJwtTokenSvc(
         token,
-        config.ACCESS_TOKEN_SECRET
+        config.accessTokenSecret
     );
     if (!email) {
         return handleErrorResUtil(res, 404, "failed", "User Not Found!");

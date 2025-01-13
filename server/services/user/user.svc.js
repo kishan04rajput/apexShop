@@ -28,12 +28,6 @@ export const checkIfUserExistSvc = async (email) => {
     return user;
 };
 
-export const createHashedPasswordSvc = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return [hashedPassword, salt];
-};
-
 export const createNewUserSvc = async (email, password, salt) => {
     const userModel = await getUserModel();
     const newUser = new userModel({

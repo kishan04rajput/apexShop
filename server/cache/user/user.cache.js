@@ -2,6 +2,9 @@ import { getConfig } from "../../config/config.js";
 import { getCacheClient } from "../config.cache.js";
 
 const config = getConfig();
+// if (!!config) {
+//     console.log("config.USER_CACHE_TTL", config);
+// }
 
 const prefixUserInfo = "user:info:";
 export const setUserInCache = async (user) => {

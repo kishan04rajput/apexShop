@@ -1,16 +1,17 @@
 import jwt from "jsonwebtoken";
-import { getConfig } from "../config/config";
+import { getConfig } from "../config/config.js";
 const config = getConfig();
+// console.log("jwt.util.js", config);
 export const generateAccessToken = (id, email, role) => {
     return jwt.sign(
         { id: id, email: email, role: role },
-        config.ACCESS_TOKEN_SECRET,
-        { expiresIn: config.ACCESS_TOKEN_EXPIRY }
+        config.accessTokenSecret,
+        { expiresIn: config.accessTokenExpiry }
     );
 };
 
 export const generateRefreshToken = (id) => {
-    return jwt.sign({ id: id }, config.REFRESH_TOKEN_SECRET, {
-        expiresIn: config.REFRESH_TOKEN_EXPIRY,
+    return jwt.sign({ id: id }, config.refreshTokenSecret, {
+        expiresIn: config.refreshTokenExpiry,
     });
 };

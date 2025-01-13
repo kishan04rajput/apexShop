@@ -52,7 +52,7 @@ export const setupConfig = () => {
 
 export const getConfig = () => {
     if (Object.keys(config).length == 0) {
-        throw "call setupConfig in main";
+        setupConfig();
     }
     return config;
 };
