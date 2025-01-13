@@ -1,9 +1,11 @@
 import { getUserFromCache, setUserInCache } from "../cache/user/user.cache.js";
+import { getConfig } from "../config/config.js";
 import {
     checkIfUserExistSvc,
     decodeUserJwtTokenSvc,
 } from "../services/user/user.svc.js";
 import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
+const config = getConfig();
 
 export const authenticationMiddleware = async (req, res, next) => {
     const token = req?.headers?.apexshopaccesstoken || null;
@@ -13,7 +15,7 @@ export const authenticationMiddleware = async (req, res, next) => {
 
     let { email } = await decodeUserJwtTokenSvc(
         token,
-        process.env.ACCESS_TOKEN_SECRET
+        config.ACCESS_TOKEN_SECRET
     );
     if (!email) {
         return handleErrorResUtil(res, 404, "failed", "User Not Found!");

@@ -1,4 +1,7 @@
+import { getConfig } from "../../config/config.js";
 import { getCacheClient } from "../config.cache.js";
+
+const config = getConfig();
 
 const prefixUserInfo = "user:info:";
 export const setUserInCache = async (user) => {
@@ -11,7 +14,7 @@ export const setUserInCache = async (user) => {
 
     let key = getUserCacheKey(user.email);
     await client.set(key, stringifiedUser);
-    await client.expire(key, process.env.CACHE_TTL); // TODO: Get expiry time from .env
+    await client.expire(key, config.USER_CACHE_TTL);
 };
 
 export const getUserFromCache = async (email) => {
