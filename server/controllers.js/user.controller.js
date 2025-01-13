@@ -6,11 +6,12 @@ import {
     saveUserRefreshTokenSvc,
     userProfileUpdateSvc,
 } from "../services/user/user.svc.js";
+import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
+import { handleSuccessResUtil } from "../utilities/handleSuccessRes.utilis.js";
 import {
     generateAccessToken,
     generateRefreshToken,
 } from "../utilities/jwt.utilis.js";
-import { responseUtili } from "../utilities/response.utilis.js";
 
 export const signupController = async (req, res) => {
     const myPlaintextPassword = req?.body?.password;
@@ -19,7 +20,7 @@ export const signupController = async (req, res) => {
     let isUserExist = await checkIfUserExistSvc(email);
 
     if (isUserExist) {
-        return responseUtili(
+        return handleErrorResUtil(
             res,
             409,
             "failed",
@@ -33,10 +34,15 @@ export const signupController = async (req, res) => {
 
     const response = await createNewUserSvc(email, hashedPassword, salt);
     if (!response) {
-        return responseUtili(res, 409, "failed", "internal server error!");
+        return handleErrorResUtil(res, 409, "failed", "internal server error!");
     }
 
-    return responseUtili(res, 200, "success", "User created successfully!");
+    return handleSuccessResUtil(
+        res,
+        200,
+        "success",
+        "User created successfully!"
+    );
 };
 
 export const loginController = async (req, res) => {
@@ -45,7 +51,7 @@ export const loginController = async (req, res) => {
 
     const user = await checkIfUserExistSvc(email);
     if (!user) {
-        return responseUtili(res, 404, "failed", "No user found!");
+        return handleErrorResUtil(res, 404, "failed", "No user found!");
     }
 
     const isPasswordCorrect = await compareUserPasswordSvc(
@@ -54,7 +60,7 @@ export const loginController = async (req, res) => {
     );
 
     if (!isPasswordCorrect) {
-        return responseUtili(res, 401, "failed", "Wrong password!");
+        return handleErrorResUtil(res, 401, "failed", "Wrong password!");
     }
 
     const accessToken = generateAccessToken(user._id, user.email, 2);
@@ -69,7 +75,7 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = user._doc;
-    return responseUtili(
+    return handleSuccessResUtil(
         res,
         200,
         "user loggedin",
@@ -82,7 +88,7 @@ export const getUserDetailsController = async (req, res) => {
     let user = req.user;
 
     if (!user) {
-        return responseUtili(res, 404, "failed!", "User not found!");
+        return handleErrorResUtil(res, 404, "failed!", "User not found!");
     }
     const {
         password,
@@ -94,7 +100,7 @@ export const getUserDetailsController = async (req, res) => {
         ...otherDetails
     } = user._doc;
 
-    return responseUtili(res, 200, "success", otherDetails);
+    return handleSuccessResUtil(res, 200, "success", otherDetails);
 };
 
 export const userProfileUpdateController = async (req, res) => {
@@ -103,11 +109,11 @@ export const userProfileUpdateController = async (req, res) => {
     let response = await userProfileUpdateSvc(email, updatedData);
     if (response.error) {
         // console.log(response.error);
-        return responseUtili(res, 404, "failed", response.error);
+        return handleErrorResUtil(res, 404, "failed", response.error);
         // return res.status(404).json({ error: response.error });
     }
 
-    return responseUtili(res, 200, "success", updatedData);
+    return handleSuccessResUtil(res, 200, "success", updatedData);
 };
 
 export const userUpdatePassword = async (req, res) => {
@@ -124,17 +130,17 @@ export const userUpdatePassword = async (req, res) => {
         };
         let response = await userProfileUpdateSvc(email, updatedData);
         if (!response) {
-            return responseUtili(
+            return handleErrorResUtil(
                 res,
                 500,
                 "error",
                 "An unexpected error occurred"
             );
         }
-        return responseUtili(res, 200, "success", "password updated");
+        return handleSuccessResUtil(res, 200, "success", "password updated");
     } catch (err) {
         console.log(err);
-        return responseUtili(
+        return handleErrorResUtil(
             res,
             500,
             "error",

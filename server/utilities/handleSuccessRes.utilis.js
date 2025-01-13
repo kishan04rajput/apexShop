@@ -1,13 +1,13 @@
-export const responseUtili = (
+export const handleSuccessResUtil = (
     res,
     httpCode = 400,
     status,
     msg,
-    others = null
+    data = null
 ) => {
     let response;
-    if (others) {
-        response = { status, msg, others };
+    if (data) {
+        response = { status, msg, data };
     } else {
         response = { status, msg };
     }

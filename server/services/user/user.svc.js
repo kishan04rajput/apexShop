@@ -13,7 +13,6 @@ import {
     getUserFromCache,
     setUserInCache,
 } from "../../cache/user/user.cache.js";
-import { responseUtili } from "../../utilities/response.utilis.js";
 
 export const checkIfUserExistSvc = async (email) => {
     let user = await getUserFromCache(email);

@@ -3,12 +3,12 @@ import {
     checkIfUserExistSvc,
     decodeUserJwtTokenSvc,
 } from "../services/user/user.svc.js";
-import { responseUtili } from "../utilities/response.utilis.js";
+import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
 
 export const authenticationMiddleware = async (req, res, next) => {
     const token = req?.headers?.apexshopaccesstoken || null;
     if (!token) {
-        return responseUtili(res, 404, "failed", "Please Login!", "No Token!");
+        return handleErrorResUtil(res, 404, "failed", "Please Login!");
     }
 
     let { email } = await decodeUserJwtTokenSvc(
@@ -16,12 +16,12 @@ export const authenticationMiddleware = async (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET
     );
     if (!email) {
-        return responseUtili(res, 404, "failed", "User Not Found!");
+        return handleErrorResUtil(res, 404, "failed", "User Not Found!");
     }
 
     let user = await checkIfUserExistSvc(email);
     if (!user) {
-        return responseUtili(res, 404, "failed", "User Not Found!");
+        return handleErrorResUtil(res, 404, "failed", "User Not Found!");
     }
 
     req.user = user;
