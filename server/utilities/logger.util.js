@@ -1,4 +1,5 @@
 import { createLogger, transports, format } from "winston";
+import util from "util";
 
 const logger = createLogger({
     level: "silly", // Set the minimum level of logs to capture
@@ -17,6 +18,33 @@ const logger = createLogger({
         }),
     ],
 });
+
+export const logReqResUtil = (req, res, next) => {
+    logger.info(
+        `Incoming request: ${util.inspect(req, {
+            showHidden: false,
+            depth: null,
+        })}`
+    );
+    // Create a temporary container to hold the response body
+    let responseBody = "";
+    // Capture the original send function
+    const originalSend = res.send;
+    // Override the send function to capture and log response body
+    res.send = function (body) {
+        responseBody = body;
+        // Log the response body
+        // logger.info(`Outgoing response body: ${responseBody}`);
+        logger.info(
+            `Outgoing response body: ${util.inspect(responseBody, {
+                showHidden: false,
+                depth: null,
+            })}`
+        );
+        return originalSend.apply(this, arguments);
+    };
+    next();
+};
 
 export default logger;
 

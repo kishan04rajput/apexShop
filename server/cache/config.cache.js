@@ -1,4 +1,5 @@
 import { createClient } from "redis";
+import logger from "../utilities/logger.util.js";
 
 let cacheClient = null;
 
@@ -7,9 +8,9 @@ export const getCacheClient = async () => {
         cacheClient = createClient();
         try {
             await cacheClient.connect();
-            console.log("cache connected successfully.");
+            logger.info("cache connected successfully.");
         } catch (e) {
-            console.log("cache connection issue\n", e);
+            logger.error(e);
         }
     }
     return cacheClient;

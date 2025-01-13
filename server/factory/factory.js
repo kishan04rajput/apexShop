@@ -1,5 +1,6 @@
 import { getCacheClient } from "../cache/config.cache.js";
 import { connectMongoDB } from "../db/config.db.js";
+import logger from "../utilities/logger.util.js";
 
 var instanceObj = {};
 export const setupFactory = async (config) => {
@@ -18,7 +19,7 @@ export const getUserMongoInstance = async (config) => {
     }
     let userDB = await connectMongoDB(config.mongoUserUri);
     if (!!userDB) {
-        console.log("user db connected successfully");
+        logger.info("user db connected successfully");
         instanceObj.userDB = userDB;
         return userDB;
     }
@@ -31,7 +32,7 @@ export const getSellerMongoInstance = async (config) => {
     }
     let sellerDB = await connectMongoDB(config.mongoSellerUri);
     if (!!sellerDB) {
-        console.log("seller db connected successfully");
+        logger.info("seller db connected successfully");
         instanceObj.sellerDB = sellerDB;
         return sellerDB;
     }
@@ -45,7 +46,7 @@ export const getAdminMongoInstance = async (config) => {
     }
     let adminDB = await connectMongoDB(config.mongoAdminUri);
     if (!!adminDB) {
-        console.log("admin db connected successfully");
+        logger.info("admin db connected successfully");
         instanceObj.adminDB = adminDB;
         return adminDB;
     }

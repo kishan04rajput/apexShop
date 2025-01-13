@@ -12,8 +12,10 @@ import {
     generateAccessToken,
     generateRefreshToken,
 } from "../utilities/jwt.utilis.js";
+import logger from "../utilities/logger.util.js";
 
 export const signupController = async (req, res) => {
+    logger.info(req);
     const myPlaintextPassword = req?.body?.password;
     const email = req?.body?.email;
 
@@ -46,6 +48,9 @@ export const signupController = async (req, res) => {
 };
 
 export const loginController = async (req, res) => {
+    // logger.info(req);
+    // console.log(req);
+
     const myPlaintextPassword = req?.body?.password;
     const email = req?.body?.email;
 
@@ -139,7 +144,7 @@ export const userUpdatePassword = async (req, res) => {
         }
         return handleSuccessResUtil(res, 200, "success", "password updated");
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         return handleErrorResUtil(
             res,
             500,
