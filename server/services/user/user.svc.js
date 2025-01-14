@@ -51,7 +51,11 @@ export const saveUserRefreshTokenSvc = async (user, refreshToken) => {
 
 export const decodeUserJwtTokenSvc = async (jwtToken, key) => {
     // TODO: change name to suitable name which can justify it's function
-    return jwt.verify(jwtToken, key);
+    try {
+        return jwt.verify(jwtToken, key);
+    } catch (e) {
+        return null;
+    }
 };
 
 export const userProfileUpdateSvc = async (email, updatedData) => {

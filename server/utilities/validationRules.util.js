@@ -18,24 +18,27 @@ export const signupValidationRulesUtil = [
 
 export const updateProfileValidationRulesUtil = [
     body("phone")
-        .optional()
+        .optional({ checkFalsy: true })
         .isMobilePhone()
         .withMessage("Phone must be a valid phone number"),
     body("name")
-        .optional()
+        .optional({ checkFalsy: true })
         .isString()
         .withMessage("Name must be a valid string"),
-    body("DOB").isDate().withMessage("DOB must be a valid date"),
+    body("DOB")
+        .optional({ checkFalsy: true })
+        .isDate()
+        .withMessage("DOB must be a valid date"),
     body("Country")
-        .optional()
+        .optional({ checkFalsy: true })
         .isString()
         .withMessage("Country must be a valid string"),
     body("state")
-        .optional()
+        .optional({ checkFalsy: true })
         .isString()
         .withMessage("State must be a valid string"),
     body("city")
-        .optional()
+        .optional({ checkFalsy: true })
         .isString()
         .withMessage("City must be a valid string"),
 ];

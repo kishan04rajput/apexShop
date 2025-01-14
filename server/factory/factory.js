@@ -9,6 +9,7 @@ export const setupFactory = async (config) => {
         await getUserMongoInstance(config);
         await getSellerMongoInstance(config);
         await getAdminMongoInstance(config);
+        await getCrMongoInstance(config);
     }
     return true;
 };
@@ -52,4 +53,18 @@ export const getAdminMongoInstance = async (config) => {
     }
 
     throw "admin db connect error";
+};
+
+export const getCrMongoInstance = async (config) => {
+    if (!!instanceObj?.CrDB) {
+        return instanceObj.CrDB;
+    }
+    let crDB = await connectMongoDB(config.mongoCrUri);
+    if (!!crDB) {
+        logger.info("cr db connected successfully");
+        instanceObj.crDB = crDB;
+        return crDB;
+    }
+
+    throw "cr db connect error";
 };

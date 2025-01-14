@@ -7,6 +7,7 @@ export const setupConfig = () => {
     let mongoUserUri = process.env.MONGO_URI_USER;
     let mongoSellerUri = process.env.MONGO_URI_SELLER;
     let mongoAdminUri = process.env.MONGO_URI_ADMIN;
+    let mongoCrUri = process.env.MONGO_URI_CR;
     let jwtSecretKey = process.env.JWT_SECRET_KEY;
     let accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
     let accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY;
@@ -24,6 +25,7 @@ export const setupConfig = () => {
     !mongoAdminUri
         ? err.push("MONGO_URI_ADMIN")
         : (config.mongoAdminUri = mongoAdminUri);
+    !mongoCrUri ? err.push("MONGO_URI_CR") : (config.mongoCrUri = mongoCrUri);
     !jwtSecretKey
         ? err.push("JWT_SECRET_KEY")
         : (config.jwtSecretKey = jwtSecretKey);

@@ -13,13 +13,12 @@ export const authenticationMiddleware = async (req, res, next) => {
         return handleErrorResUtil(res, 404, "failed", "Please Login!");
     }
 
-    let { email } = await decodeUserJwtTokenSvc(
-        token,
-        config.accessTokenSecret
-    );
-    if (!email) {
-        return handleErrorResUtil(res, 404, "failed", "User Not Found!");
+    let response = await decodeUserJwtTokenSvc(token, config.accessTokenSecret);
+    if (!response) {
+        return handleErrorResUtil(res, 404, "failed", "Please login again!");
     }
+
+    let { email } = response;
 
     let user = await checkIfUserExistSvc(email);
     if (!user) {
