@@ -7,12 +7,27 @@ import {
 } from "../../controllers.js/user.controller.js";
 import { authenticationMiddleware } from "../../middlewares/auth.mw.js";
 import express from "express";
+import { validateReqMW } from "../../middlewares/validateReq.mw.js";
+import {
+    loginValidationRulesUtil,
+    signupValidationRulesUtil,
+    updatePasswordValidationRulesUtil,
+    updateProfileValidationRulesUtil,
+} from "../../utilities/validationRules.util.js";
 
 export function userRoutes(router) {
     const userRoutes = express.Router();
 
-    userRoutes.post("/signup", signupController);
-    userRoutes.post("/login", loginController);
+    userRoutes.post(
+        "/signup",
+        validateReqMW(signupValidationRulesUtil),
+        signupController
+    );
+    userRoutes.post(
+        "/login",
+        validateReqMW(loginValidationRulesUtil),
+        loginController
+    );
     userRoutes.get(
         "/profile/info",
         authenticationMiddleware,
@@ -20,12 +35,13 @@ export function userRoutes(router) {
     );
     userRoutes.put(
         "/profile/update",
+        validateReqMW(updateProfileValidationRulesUtil),
         authenticationMiddleware,
         userProfileUpdateController
     );
-    userRoutes.post(
-        // TODO: Patch
+    userRoutes.patch(
         "/updatepassword",
+        validateReqMW(updatePasswordValidationRulesUtil),
         authenticationMiddleware,
         userUpdatePassword
     );
