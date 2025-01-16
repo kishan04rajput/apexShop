@@ -14,6 +14,7 @@ export const setupConfig = () => {
     let refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
     let refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY;
     let userCacheTtl = process.env.USER_CACHE_TTL;
+    let sellerCacheTtl = process.env.SELLER_CACHE_TTL;
 
     // check mandatory env variables
     !mongoUserUri
@@ -44,6 +45,9 @@ export const setupConfig = () => {
     !userCacheTtl
         ? err.push("USER_CACHE_TTL")
         : (config.userCacheTtl = userCacheTtl);
+    !sellerCacheTtl
+        ? err.push("SELLER_CACHE_TTL")
+        : (config.sellerCacheTtl = sellerCacheTtl);
 
     if (err.length > 0) {
         throw err.join(", ") + " mandatory values are missing";

@@ -4,25 +4,27 @@ import { getCacheClient } from "../config.cache.js";
 const config = getConfig();
 
 const prefixUserInfo = "user:info:";
+const userDbIndex = 0; // Using database 0 for users
+
 export const setUserInCache = async (user) => {
     if (!user?.email) {
         throw "Invalid user";
     }
-    let client = await getCacheClient();
+    let client = await getCacheClient(userDbIndex);
 
     let stringifiedUser = JSON.stringify(user);
 
     let key = getUserCacheKey(user.email);
     await client.set(key, stringifiedUser);
-    await client.expire(key, config.USER_CACHE_TTL);
+    await client.expire(key, config.userCacheTtl);
 };
 
 export const getUserFromCache = async (email) => {
-    if (!email || email == "") {
+    if (!email || email === "") {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient();
+    let client = await getCacheClient(userDbIndex);
 
     let stringifiedUser = await client.get(getUserCacheKey(email));
     if (!stringifiedUser) {
