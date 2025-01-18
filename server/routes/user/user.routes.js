@@ -5,9 +5,9 @@ import {
     userProfileUpdateController,
     userUpdatePassword,
 } from "../../controllers.js/user/user.controller.js";
-import { authenticationMiddleware } from "../../middlewares/auth.mw.js";
+import { authenticationMiddleware } from "../../middlewares/auth.middleware.js";
 import express from "express";
-import { validateReqMW } from "../../middlewares/validateReq.mw.js";
+import { validateReqMW } from "../../middlewares/validateReq.middleware.js";
 import {
     loginValidationRulesUtil,
     signupValidationRulesUtil,
