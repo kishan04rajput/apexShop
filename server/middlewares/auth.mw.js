@@ -4,7 +4,7 @@ import {
     checkIfUserExistSvc,
     decodeUserJwtTokenSvc,
 } from "../services/user/user.svc.js";
-import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
+import { handleErrorResUtil } from "../utilities/response.util.js";
 const config = getConfig();
 
 export const authenticationMiddleware = async (req, res, next) => {

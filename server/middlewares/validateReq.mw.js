@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
+import { handleErrorResUtil } from "../utilities/response.util.js";
 
 export const validateReqMW = (validations) => {
     return async (req, res, next) => {

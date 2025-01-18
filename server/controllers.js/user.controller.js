@@ -6,13 +6,15 @@ import {
     userProfileUpdateSvc,
 } from "../services/user/user.svc.js";
 import { createHashedPasswordUtil } from "../utilities/createHashedPassword.util.js";
-import { handleErrorResUtil } from "../utilities/handleErrorRes.util.js";
-import { handleSuccessResUtil } from "../utilities/handleSuccessRes.utilis.js";
 import {
     generateAccessToken,
     generateRefreshToken,
 } from "../utilities/jwt.utilis.js";
 import logger from "../utilities/logger.util.js";
+import {
+    handleErrorResUtil,
+    handleSuccessResUtil,
+} from "../utilities/response.util.js";
 
 export const signupController = async (req, res) => {
     logger.info(req);
