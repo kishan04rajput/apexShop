@@ -4,17 +4,17 @@ import {
     createNewSellerSvc,
     saveSellerRefreshTokenSvc,
     sellerProfileUpdateSvc,
-} from "../services/seller/seller.svc.js";
-import { createHashedPasswordUtil } from "../utilities/createHashedPassword.util.js";
+} from "../../services/seller/seller.svc.js";
+import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
 import {
     generateAccessToken,
     generateRefreshToken,
-} from "../utilities/jwt.utilis.js";
-import logger from "../utilities/logger.util.js";
+} from "../../utilities/jwt.utilis.js";
+import logger from "../../utilities/logger.util.js";
 import {
     handleErrorResUtil,
     handleSuccessResUtil,
-} from "../utilities/response.util.js";
+} from "../../utilities/response.util.js";
 
 export const signupController = async (req, res) => {
     // logger.info(req);
