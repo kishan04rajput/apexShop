@@ -15,6 +15,7 @@ export const setupConfig = () => {
     let refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY;
     let userCacheTtl = process.env.USER_CACHE_TTL;
     let sellerCacheTtl = process.env.SELLER_CACHE_TTL;
+    let loggerLevel = process.env.LOGGER_LEVEL;
 
     // check mandatory env variables
     !mongoUserUri
@@ -48,6 +49,9 @@ export const setupConfig = () => {
     !sellerCacheTtl
         ? err.push("SELLER_CACHE_TTL")
         : (config.sellerCacheTtl = sellerCacheTtl);
+    !loggerLevel
+        ? err.push("LOGGER_LEVEL")
+        : (config.loggerLevel = loggerLevel);
 
     if (err.length > 0) {
         throw err.join(", ") + " mandatory values are missing";

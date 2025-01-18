@@ -1,8 +1,10 @@
 import { createLogger, transports, format } from "winston";
 import util from "util";
+import { getConfig } from "../config/config.js";
+const config = getConfig();
 
 const logger = createLogger({
-    level: "silly", // Set the minimum level of logs to capture
+    level: config.loggerLevel, // Set the minimum level of logs to capture
     format: format.combine(
         format.timestamp({
             format: "YYYY-MM-DD HH:mm:ss",
