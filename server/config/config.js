@@ -10,12 +10,12 @@ export const setupConfig = () => {
     let mongoCrUri = process.env.MONGO_URI_CR;
     let jwtSecretKey = process.env.JWT_SECRET_KEY;
     let accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-    let accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY;
+    let accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY || "600";
     let refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
-    let refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY;
-    let userCacheTtl = process.env.USER_CACHE_TTL;
-    let sellerCacheTtl = process.env.SELLER_CACHE_TTL;
-    let loggerLevel = process.env.LOGGER_LEVEL;
+    let refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY || "600";
+    let userCacheTtl = process.env.USER_CACHE_TTL || "600";
+    let sellerCacheTtl = process.env.SELLER_CACHE_TTL || "600";
+    let loggerLevel = process.env.LOGGER_LEVEL || "silly";
 
     // check mandatory env variables
     !mongoUserUri

@@ -12,14 +12,17 @@ const main = async () => {
     if (!(await setupFactory(config))) return;
 
     const app = express();
-    // app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(morgan("combined"));
+    // app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(express.json());
     app.use(cookieParser());
     app.use(routes());
 
     app.listen(4444, () => {
-        logger.info(`Server started on port 4444!`);
+        logger.info(`Server started on port 4444!`, "asdsad", { port: 4444 }, [
+            "bdfsdf",
+            "sdfsdf",
+        ]);
     });
 };
 

@@ -13,6 +13,10 @@ export const getCacheClient = async (dbIndex = 0) => {
         } catch (e) {
             logger.error(e);
         }
+        // const [clientConnectErr, clientConnect] ?= await cacheClient.connect();
+        // if (clientConnectErr) {
+        //     return clientConnectErr;
+        // }
     } else {
         await cacheClient.select(dbIndex);
     }

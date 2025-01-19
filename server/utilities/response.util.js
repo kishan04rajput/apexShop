@@ -6,7 +6,7 @@ export const handleErrorResUtil = (
 ) => {
     let response;
     if (errMsg) {
-        response = { status, errMsg };
+        response = { status, error: errMsg };
     } else {
         response = { status };
     }

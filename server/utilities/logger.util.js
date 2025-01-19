@@ -3,6 +3,23 @@ import util from "util";
 import { getConfig } from "../config/config.js";
 const config = getConfig();
 
+const customFormat = format.printf(
+    ({ level, message, timestamp, service, ...other }) => {
+        if (Object.keys(other).length > 0) {
+            let otherData = "";
+            let otherKeys = Object.keys(other);
+            otherKeys.forEach((element) => {
+                otherData += `"${element}": "${other[element]}"\n`;
+            });
+            return `\n{"level": "${level}"\n"message": "${message}"\n"service": "${service}"\n"timestamp": "${timestamp}"\n${otherData}`;
+        }
+        return `\nLevel: ${level}\nMessage: ${message}\nService: ${service}\nTimestamp: ${timestamp}`;
+    }
+);
+// const customFormat = format.printf((info) => {
+//     return `${Object.keys(info)}`;
+// });
+
 const logger = createLogger({
     level: config.loggerLevel, // Set the minimum level of logs to capture
     format: format.combine(
@@ -12,13 +29,10 @@ const logger = createLogger({
         format.errors({ stack: true }),
         format.splat(),
         format.json()
+        // customFormat
     ),
     defaultMeta: { service: "user-service" },
-    transports: [
-        new transports.Console({
-            format: format.combine(format.colorize(), format.simple()),
-        }),
-    ],
+    transports: [new transports.Console()],
 });
 
 export const logReqResUtil = (req, res, next) => {
@@ -36,7 +50,6 @@ export const logReqResUtil = (req, res, next) => {
     res.send = function (body) {
         responseBody = body;
         // Log the response body
-        // logger.info(`Outgoing response body: ${responseBody}`);
         logger.info(
             `Outgoing response body: ${util.inspect(responseBody, {
                 showHidden: false,
@@ -48,8 +61,13 @@ export const logReqResUtil = (req, res, next) => {
     next();
 };
 
-export default logger;
+// const logger = {}
 
+// logger.error = () => {
+//     this.level =
+// }
+
+export default logger;
 // logger.error("This is an error message");
 // logger.warn("This is a warning message");
 // logger.info("This is an informational message");
