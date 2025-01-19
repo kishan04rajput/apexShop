@@ -3,7 +3,7 @@ import { getConfig } from "../config/config.js";
 import {
     checkIfUserExistSvc,
     decodeUserJwtTokenSvc,
-} from "../services/user/user.svc.js";
+} from "../services/user/user.service.js";
 import { handleErrorResUtil } from "../utilities/response.util.js";
 const config = getConfig();
 

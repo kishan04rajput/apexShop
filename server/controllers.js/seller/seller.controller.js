@@ -4,12 +4,12 @@ import {
     createNewSellerSvc,
     saveSellerRefreshTokenSvc,
     sellerProfileUpdateSvc,
-} from "../../services/seller/seller.svc.js";
+} from "../../services/seller/seller.service.js";
 import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
 import {
     generateAccessToken,
     generateRefreshToken,
-} from "../../utilities/jwt.utilis.js";
+} from "../../utilities/jwt.util.js";
 import logger from "../../utilities/logger.util.js";
 import {
     handleErrorResUtil,

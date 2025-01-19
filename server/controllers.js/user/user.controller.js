@@ -4,12 +4,12 @@ import {
     createNewUserSvc,
     saveUserRefreshTokenSvc,
     userProfileUpdateSvc,
-} from "../../services/user/user.svc.js";
+} from "../../services/user/user.service.js";
 import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
 import {
     generateAccessToken,
     generateRefreshToken,
-} from "../../utilities/jwt.utilis.js";
+} from "../../utilities/jwt.util.js";
 import logger from "../../utilities/logger.util.js";
 import {
     handleErrorResUtil,

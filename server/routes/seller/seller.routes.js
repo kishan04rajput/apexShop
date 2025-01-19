@@ -7,7 +7,7 @@ import {
 } from "../../controllers.js/seller/seller.controller.js";
 import { authenticationMiddleware } from "../../middlewares/auth.middleware.js";
 import express from "express";
-import { validateReqMW } from "../../middlewares/validateReq.middleware.js";
+import { validateReqMW } from "../../middlewares/validateRequest.middleware.js";
 import {
     loginValidationRulesUtil,
     signupValidationRulesUtil,
