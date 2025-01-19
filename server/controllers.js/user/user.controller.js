@@ -82,13 +82,10 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = user._doc;
-    return handleSuccessResUtil(
-        res,
-        200,
-        "user loggedin",
-        { ...otherDetails },
-        { ApexShopAccessToken: accessToken }
-    );
+    return handleSuccessResUtil(res, 200, "success", "user loggedin", {
+        ApexShopAccessToken: accessToken,
+        ...otherDetails,
+    });
 };
 
 export const getUserDetailsController = async (req, res) => {
@@ -107,7 +104,13 @@ export const getUserDetailsController = async (req, res) => {
         ...otherDetails
     } = user._doc;
 
-    return handleSuccessResUtil(res, 200, "success", otherDetails);
+    return handleSuccessResUtil(
+        res,
+        200,
+        "success",
+        "data fetched successfully",
+        otherDetails
+    );
 };
 
 export const userProfileUpdateController = async (req, res) => {
@@ -120,7 +123,13 @@ export const userProfileUpdateController = async (req, res) => {
         // return res.status(404).json({ error: response.error });
     }
 
-    return handleSuccessResUtil(res, 200, "success", updatedData);
+    return handleSuccessResUtil(
+        res,
+        200,
+        "success",
+        "data updated successfully",
+        updatedData
+    );
 };
 
 export const userUpdatePassword = async (req, res) => {

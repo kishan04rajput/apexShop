@@ -79,13 +79,10 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = seller._doc;
-    return handleSuccessResUtil(
-        res,
-        200,
-        "seller loggedin",
-        { ...otherDetails },
-        { ApexShopAccessToken: accessToken }
-    );
+    return handleSuccessResUtil(res, 200, "success", "seller loggedin", {
+        ApexShopAccessToken: accessToken,
+        ...otherDetails,
+    });
 };
 
 export const getSellerDetailsController = async (req, res) => {
@@ -104,7 +101,13 @@ export const getSellerDetailsController = async (req, res) => {
         ...otherDetails
     } = seller._doc;
 
-    return handleSuccessResUtil(res, 200, "success", otherDetails);
+    return handleSuccessResUtil(
+        res,
+        200,
+        "success",
+        "data fetched successfully",
+        otherDetails
+    );
 };
 
 export const sellerProfileUpdateController = async (req, res) => {
@@ -116,7 +119,13 @@ export const sellerProfileUpdateController = async (req, res) => {
         return handleErrorResUtil(res, 404, "failed", response.error);
     }
 
-    return handleSuccessResUtil(res, 200, "success", updatedData);
+    return handleSuccessResUtil(
+        res,
+        200,
+        "success",
+        "data updated successfully",
+        updatedData
+    );
 };
 
 export const sellerUpdatePassword = async (req, res) => {
@@ -140,7 +149,12 @@ export const sellerUpdatePassword = async (req, res) => {
                 "An unexpected error occurred"
             );
         }
-        return handleSuccessResUtil(res, 200, "success", "password updated");
+        return handleSuccessResUtil(
+            res,
+            200,
+            "success",
+            "password updated successfully"
+        );
     } catch (err) {
         logger.error(`err from sellerUpdatePasswordController \n ${err}`);
         return handleErrorResUtil(
