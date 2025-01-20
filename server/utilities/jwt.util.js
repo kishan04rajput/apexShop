@@ -4,7 +4,15 @@ const config = getConfig();
 // console.log("jwt.util.js", config);
 export const generateAccessToken = (id, email, role) => {
     return jwt.sign(
-        { id: id, email: email, role: role },
+        {
+            iss: "ApexShop",
+            sub: email,
+            aud: email,
+            nbf: Math.floor(Date.now() / 1000),
+            iat: Date.now(),
+            jti: id,
+            role: role,
+        },
         config.accessTokenSecret,
         { expiresIn: config.accessTokenExpiry }
     );

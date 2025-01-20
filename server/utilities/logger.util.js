@@ -16,9 +16,6 @@ const customFormat = format.printf(
         return `\nLevel: ${level}\nMessage: ${message}\nService: ${service}\nTimestamp: ${timestamp}`;
     }
 );
-// const customFormat = format.printf((info) => {
-//     return `${Object.keys(info)}`;
-// });
 
 const logger = createLogger({
     level: config.loggerLevel, // Set the minimum level of logs to capture
@@ -61,13 +58,8 @@ export const logReqResUtil = (req, res, next) => {
     next();
 };
 
-// const logger = {}
-
-// logger.error = () => {
-//     this.level =
-// }
-
 export default logger;
+
 // logger.error("This is an error message");
 // logger.warn("This is a warning message");
 // logger.info("This is an informational message");

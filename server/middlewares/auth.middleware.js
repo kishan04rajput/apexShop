@@ -18,14 +18,14 @@ export const authenticationMiddleware = async (req, res, next) => {
         return handleErrorResUtil(res, 404, "failed", "Please login again!");
     }
 
-    let { email } = response;
+    let { sub } = response;
 
-    let user = await checkIfUserExistSvc(email);
+    let user = await checkIfUserExistSvc(sub);
     if (!user) {
         return handleErrorResUtil(res, 404, "failed", "User Not Found!");
     }
 
     req.user = user;
-    req.user.email = email;
+    req.user.email = sub;
     next();
 };

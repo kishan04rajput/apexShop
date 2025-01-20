@@ -54,6 +54,7 @@ export const decodeUserJwtTokenSvc = async (jwtToken, key) => {
     try {
         return jwt.verify(jwtToken, key);
     } catch (e) {
+        console.log(e);
         return null;
     }
 };
