@@ -1,5 +1,5 @@
 import { getCacheClient } from "../cache/config.cache.js";
-import { connectMongoDB } from "../db/config.db.js";
+import { connectMongoDB } from "../database/config.database.js";
 import logger from "../utilities/logger.util.js";
 
 var instanceObj = {};

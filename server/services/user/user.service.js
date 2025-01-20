@@ -7,7 +7,7 @@ import {
     findUserUsingEmailDB,
     saveUserRefreshTokenDB,
     userProfielUpdateDB,
-} from "../../db/user/user.db.js";
+} from "../../database/user/user.database.js";
 import { getUserModel } from "../../models/user.model.js";
 import {
     getUserFromCache,

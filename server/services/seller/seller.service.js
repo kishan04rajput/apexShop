@@ -7,7 +7,7 @@ import {
     findSellerUsingEmailDB,
     saveSellerRefreshTokenDB,
     sellerProfileUpdateDB,
-} from "../../db/seller/seller.db.js";
+} from "../../database/seller/seller.database.js";
 import { getSellerModel } from "../../models/seller.model.js";
 import {
     getSellerFromCache,
