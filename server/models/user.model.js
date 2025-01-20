@@ -1,4 +1,4 @@
-import { getUserMongoInstance } from "../factory/factory.js";
+import { getUserMongoInstance } from "../factory/database.factory.js";
 
 var UserModel = undefined;
 export const getUserModel = async () => {

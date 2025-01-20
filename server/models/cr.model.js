@@ -1,4 +1,4 @@
-import { getCrMongoInstance } from "../factory/factory.js";
+import { getCrMongoInstance } from "../factory/database.factory.js";
 
 var CrModel = undefined;
 export const getCrModel = async () => {

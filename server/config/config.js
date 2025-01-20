@@ -15,6 +15,8 @@ export const setupConfig = () => {
     let refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY || "600";
     let userCacheTtl = process.env.USER_CACHE_TTL || "600";
     let sellerCacheTtl = process.env.SELLER_CACHE_TTL || "600";
+    let adminCacheTtl = process.env.ADMIN_CACHE_TTL || "600";
+    let crCacheTtl = process.env.CR_CACHE_TTL || "600";
     let loggerLevel = process.env.LOGGER_LEVEL || "silly";
 
     // check mandatory env variables
@@ -52,6 +54,11 @@ export const setupConfig = () => {
     !loggerLevel
         ? err.push("LOGGER_LEVEL")
         : (config.loggerLevel = loggerLevel);
+
+    !adminCacheTtl
+        ? err.push("ADMIN_CACHE_TTL")
+        : (config.adminCacheTtl = adminCacheTtl);
+    !crCacheTtl ? err.push("CR_CACHE_TTL") : (config.crCacheTtl = crCacheTtl);
 
     if (err.length > 0) {
         throw err.join(", ") + " mandatory values are missing";

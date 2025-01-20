@@ -1,4 +1,4 @@
-import { getAdminMongoInstance } from "../factory/factory.js";
+import { getAdminMongoInstance } from "../factory/database.factory.js";
 
 var AdminModel = undefined;
 export const getAdminModel = async () => {
