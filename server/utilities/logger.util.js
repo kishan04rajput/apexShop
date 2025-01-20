@@ -33,29 +33,26 @@ const logger = createLogger({
 });
 
 export const logReqResUtil = (req, res, next) => {
-    logger.info(
-        `Incoming request: ${util.inspect(req, {
-            showHidden: false,
-            depth: null,
-        })}`
-    );
     // Create a temporary container to hold the response body
     let responseBody = "";
     // Capture the original send function
-    const originalSend = res.send;
-    // Override the send function to capture and log response body
+    const originalSend = res.send; // Override the send function to capture and log response body
     res.send = function (body) {
         responseBody = body;
-        // Log the response body
-        logger.info(
-            `Outgoing response body: ${util.inspect(responseBody, {
-                showHidden: false,
-                depth: null,
-            })}`
-        );
+        // Log the request and response
+        logger.info({
+            endpoint: req.url,
+            method: req.method,
+            headers: req.headers,
+            userId: req.user ? req.user.id : "Unknown",
+            request: { body: req.body, params: req.params },
+            response: { body: responseBody },
+            msg: "logging request and response",
+        });
         return originalSend.apply(this, arguments);
     };
     next();
+    // console.log("\nreq.user = ", req._id);
 };
 
 export default logger;

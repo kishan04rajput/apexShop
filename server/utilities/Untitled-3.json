@@ -1,0 +1,36 @@
+{
+    "level": "info",
+    "message": {
+        "endpoint": "/profile/update",
+        "headers": {
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br",
+            "apexshopaccesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBcGV4U2hvcCIsInN1YiI6Imtpc2hhbjlyYWpwdXRAZ21haWwuY29tIiwiYXVkIjoia2lzaGFuOXJhanB1dEBnbWFpbC5jb20iLCJuYmYiOjE3MzczNzUyNjcsImlhdCI6MTczNzM3NTI2Nzg5MywianRpIjoiNjc4NTM4Y2FhYzE2N2IxMmRmODgyYzE0Iiwicm9sZSI6MiwiZXhwIjoxNzM3Mzc1MzU0MjkzfQ.Uga4Ue-5NAjc4x9TRlo0uuO87jK9TMHjSrLc81p6pxE",
+            "connection": "keep-alive",
+            "content-length": "100",
+            "content-type": "application/json",
+            "host": "localhost:4444",
+            "postman-token": "e78f9595-1204-496c-a9a2-5a046ba37fce",
+            "user-agent": "PostmanRuntime/7.43.0"
+        },
+        "method": "PUT",
+        "msg": "logging request and response",
+        "request": {
+            "body": {
+                "city": "atul",
+                "country": "",
+                "dob": "",
+                "name": "",
+                "phone": "",
+                "state": ""
+            },
+            "params": {}
+        },
+        "response": {
+            "body": "{\"status\":\"success\",\"msg\":\"data updated successfully\",\"data\":{\"phone\":\"\",\"name\":\"\",\"dob\":\"\",\"country\":\"\",\"state\":\"\",\"city\":\"atul\"}}"
+        },
+        "userId": "678538caac167b12df882c14"
+    },
+    "service": "user-service",
+    "timestamp": "2025-01-20 18:25:04"
+}

@@ -82,6 +82,8 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = user._doc;
+    req.user = user._doc;
+    req.user.id = _id;
     return handleSuccessResUtil(res, 200, "success", "user loggedin", {
         ApexShopAccessToken: accessToken,
         ...otherDetails,

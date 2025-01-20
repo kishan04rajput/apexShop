@@ -12,10 +12,10 @@ const main = async () => {
     if (!(await setupFactory(config))) return;
 
     const app = express();
-    app.use(morgan("combined"));
-    // app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(express.json());
     app.use(cookieParser());
+    // app.use(morgan("combined"));
+    app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(routes());
 
     app.listen(4444, () => {
