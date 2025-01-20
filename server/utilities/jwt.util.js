@@ -7,7 +7,7 @@ export const generateAccessToken = (id, email, role) => {
         {
             iss: "ApexShop",
             sub: email,
-            aud: email,
+            aud: ["all"],
             nbf: Math.floor(Date.now() / 1000),
             iat: Date.now(),
             jti: id,
