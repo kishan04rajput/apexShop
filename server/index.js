@@ -14,8 +14,8 @@ const main = async () => {
     const app = express();
     app.use(express.json());
     app.use(cookieParser());
-    app.use(morgan("combined"));
-    // app.use((req, res, next) => logReqResUtil(req, res, next));
+    // app.use(morgan("combined"));
+    app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(routes());
 
     app.listen(4444, () => {
