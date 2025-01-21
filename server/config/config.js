@@ -18,6 +18,10 @@ export const setupConfig = () => {
     let adminCacheTtl = process.env.ADMIN_CACHE_TTL || "600";
     let crCacheTtl = process.env.CR_CACHE_TTL || "600";
     let loggerLevel = process.env.LOGGER_LEVEL || "silly";
+    let userCacheDbIndex = process.env.USER_CACHE_DB_INDEX || "0";
+    let sellerCacheDbIndex = process.env.SELLER_CACHE_DB_INDEX || "1";
+    let adminCacheDbIndex = process.env.ADMIN_CACHE_DB_INDEX || "2";
+    let crCacheDbIndex = process.env.CR_CACHE_DB_INDEX || "3";
 
     // check mandatory env variables
     !mongoUserUri
@@ -54,11 +58,22 @@ export const setupConfig = () => {
     !loggerLevel
         ? err.push("LOGGER_LEVEL")
         : (config.loggerLevel = loggerLevel);
-
     !adminCacheTtl
         ? err.push("ADMIN_CACHE_TTL")
         : (config.adminCacheTtl = adminCacheTtl);
     !crCacheTtl ? err.push("CR_CACHE_TTL") : (config.crCacheTtl = crCacheTtl);
+    !userCacheDbIndex
+        ? err.push("USER_CACHE_DB_INDEX")
+        : (config.userCacheDbIndex = userCacheDbIndex);
+    !sellerCacheDbIndex
+        ? err.push("SELLER_CACHE_DB_INDEX")
+        : (config.sellerCacheDbIndex = sellerCacheDbIndex);
+    !adminCacheDbIndex
+        ? err.push("ADMIN_CACHE_DB_INDEX")
+        : (config.adminCacheDbIndex = adminCacheDbIndex);
+    !crCacheDbIndex
+        ? err.push("CR_CACHE_DB_INDEX")
+        : (config.crCacheDbIndex = crCacheDbIndex);
 
     if (err.length > 0) {
         throw err.join(", ") + " mandatory values are missing";

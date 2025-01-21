@@ -1,16 +1,15 @@
 import { getConfig } from "../../config/config.js";
-import { getCacheClient } from "../config.cache.js";
+import { getUserCacheInstance } from "../../factory/cache.factory.js";
 
 const config = getConfig();
 
 const prefixUserInfo = "user:info:";
-const userDbIndex = 0; // Using database 0 for users
 
 export const setUserInCache = async (user) => {
     if (!user?.email) {
         throw "Invalid user";
     }
-    let client = await getCacheClient(userDbIndex);
+    let client = await getUserCacheInstance(config);
 
     let stringifiedUser = JSON.stringify(user);
 
@@ -24,7 +23,7 @@ export const getUserFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient(userDbIndex);
+    let client = await getUserCacheInstance(config);
 
     let stringifiedUser = await client.get(getUserCacheKey(email));
     if (!stringifiedUser) {

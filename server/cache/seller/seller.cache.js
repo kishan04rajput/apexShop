@@ -1,16 +1,16 @@
 import { getConfig } from "../../config/config.js";
+import { getSellerCacheInstance } from "../../factory/cache.factory.js";
 import { getCacheClient } from "../config.cache.js";
 
 const config = getConfig();
 
 const prefixSellerInfo = "seller:info:";
-const sellerDbIndex = 1; // Using database 1 for sellers
 
 export const setSellerInCache = async (seller) => {
     if (!seller?.email) {
         throw "Invalid seller";
     }
-    let client = await getCacheClient(sellerDbIndex);
+    let client = await getSellerCacheInstance(config.sellerCacheDbIndex);
 
     let stringifiedSeller = JSON.stringify(seller);
 
@@ -24,7 +24,7 @@ export const getSellerFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient(sellerDbIndex);
+    let client = await getCacheClient(config.sellerCacheDbIndex);
 
     let stringifiedSeller = await client.get(getSellerCacheKey(email));
     if (!stringifiedSeller) {
