@@ -40,44 +40,25 @@ export const setupConfig = () => {
     !accessTokenSecret
         ? err.push("ACCESS_TOKEN_SECRET")
         : (config.accessTokenSecret = accessTokenSecret);
-    !accessTokenExpiry
-        ? err.push("ACCESS_TOKEN_EXPIRY")
-        : (config.accessTokenExpiry = accessTokenExpiry);
     !refreshTokenSecret
         ? err.push("REFRESH_TOKEN_SECRET")
         : (config.refreshTokenSecret = refreshTokenSecret);
-    !refreshTokenExpiry
-        ? err.push("REFRESH_TOKEN_EXPIRY")
-        : (config.refreshTokenExpiry = refreshTokenExpiry);
-    !userCacheTtl
-        ? err.push("USER_CACHE_TTL")
-        : (config.userCacheTtl = userCacheTtl);
-    !sellerCacheTtl
-        ? err.push("SELLER_CACHE_TTL")
-        : (config.sellerCacheTtl = sellerCacheTtl);
-    !loggerLevel
-        ? err.push("LOGGER_LEVEL")
-        : (config.loggerLevel = loggerLevel);
-    !adminCacheTtl
-        ? err.push("ADMIN_CACHE_TTL")
-        : (config.adminCacheTtl = adminCacheTtl);
-    !crCacheTtl ? err.push("CR_CACHE_TTL") : (config.crCacheTtl = crCacheTtl);
-    !userCacheDbIndex
-        ? err.push("USER_CACHE_DB_INDEX")
-        : (config.userCacheDbIndex = userCacheDbIndex);
-    !sellerCacheDbIndex
-        ? err.push("SELLER_CACHE_DB_INDEX")
-        : (config.sellerCacheDbIndex = sellerCacheDbIndex);
-    !adminCacheDbIndex
-        ? err.push("ADMIN_CACHE_DB_INDEX")
-        : (config.adminCacheDbIndex = adminCacheDbIndex);
-    !crCacheDbIndex
-        ? err.push("CR_CACHE_DB_INDEX")
-        : (config.crCacheDbIndex = crCacheDbIndex);
 
     if (err.length > 0) {
         throw err.join(", ") + " mandatory values are missing";
     }
+
+    config.accessTokenExpiry = accessTokenExpiry;
+    config.refreshTokenExpiry = refreshTokenExpiry;
+    config.userCacheTtl = userCacheTtl;
+    config.sellerCacheTtl = sellerCacheTtl;
+    config.loggerLevel = loggerLevel;
+    config.adminCacheTtl = adminCacheTtl;
+    config.crCacheTtl = crCacheTtl;
+    config.userCacheDbIndex = userCacheDbIndex;
+    config.sellerCacheDbIndex = sellerCacheDbIndex;
+    config.adminCacheDbIndex = adminCacheDbIndex;
+    config.crCacheDbIndex = crCacheDbIndex;
 
     return config;
 };
