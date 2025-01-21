@@ -33,35 +33,6 @@ const logger = createLogger({
     transports: [new transports.Console()],
 });
 
-// export const logReqResUtil = (req, res, next) => {
-//     // Create a temporary container to hold the response body
-//     let responseBody = "";
-//     // Capture the original send function
-//     const originalSend = res.json; // Override the send function to capture and log response body
-//     res.json = function (body) {
-//         responseBody = body;
-//         const responseHeaders = res.getHeaders();
-//         // Log the request and response
-//         logger.info({
-//             endpoint: req.url,
-//             method: req.method,
-//             userId: req.user ? req.user.id : "Unknown",
-//             request: {
-//                 body: req.body,
-//                 params: req.params,
-//                 headers: req.headers,
-//             },
-//             response: {
-//                 body: responseBody,
-//                 header: responseHeaders,
-//             },
-//             msg: "logging request and response",
-//         });
-//         return originalSend.apply(this, arguments);
-//     };
-//     next();
-// };
-
 const deepClone = (obj) => {
     return JSON.parse(JSON.stringify(obj));
 };
