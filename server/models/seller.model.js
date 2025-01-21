@@ -11,7 +11,7 @@ export const getSellerModel = async () => {
             name: { type: String },
             password: { type: String, required: true },
             salt: { type: String },
-            created_at: { type: Date, default: Date.now },
+            created_at: { type: Date, default: Date.now() },
             created_by: { type: String },
             updated_at: { type: Date },
             updated_by: { type: String },
@@ -30,6 +30,10 @@ export const getSellerModel = async () => {
                     salt: { type: String },
                 },
             ],
+            type: {
+                type: String,
+                default: "normal",
+            },
         });
 
         const sellerModel = sellerMongoInstance.model("Seller", sellerSchema);
