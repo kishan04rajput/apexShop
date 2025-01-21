@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { getConfig } from "../config/config.js";
+import { nanoid } from "nanoid";
 const config = getConfig();
 // console.log("jwt.util.js", config);
 export const generateAccessToken = (id, email, role) => {
@@ -10,7 +11,7 @@ export const generateAccessToken = (id, email, role) => {
             aud: ["all"],
             nbf: Math.floor(Date.now() / 1000),
             iat: Date.now(),
-            jti: id,
+            jti: nanoid(),
             role: role,
         },
         config.accessTokenSecret,
