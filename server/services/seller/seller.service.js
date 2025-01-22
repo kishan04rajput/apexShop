@@ -34,7 +34,6 @@ export const createNewSellerSvc = async (email, password, salt) => {
         email,
         password,
         salt,
-        oldPassword: [{ password, salt }],
     });
 
     return await createNewSellerDB(newSeller);
