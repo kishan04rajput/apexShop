@@ -1,11 +1,8 @@
 import { getConfig } from "../../config/config.js";
 import { getAdminCacheInstance } from "../../factory/cache.factory.js";
-import { getCacheClient } from "../config.cache.js";
-
 const config = getConfig();
 
 const prefixAdminInfo = "admin:info:";
-const adminDbIndex = 3; // Using database 3 for admin
 
 export const setAdminInCache = async (admin) => {
     if (!admin?.email) {

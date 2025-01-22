@@ -37,7 +37,7 @@ const deepClone = (obj) => {
     return JSON.parse(JSON.stringify(obj));
 };
 
-export const logReqResUtil = (req, res, next) => {
+export const logRequestResponseUtil = (req, res, next) => {
     // Create a temporary container to hold the response body
     let responseBody = "";
     // Capture the original send function

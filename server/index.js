@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { setupFactory } from "./factory/factory.js";
 import { setupConfig } from "./config/config.js";
-import logger, { logReqResUtil } from "./utilities/logger.util.js";
+import logger, { logRequestResponseUtil } from "./utilities/logger.util.js";
 
 const main = async () => {
     let config = setupConfig();
@@ -15,7 +15,7 @@ const main = async () => {
     app.use(express.json());
     app.use(cookieParser());
     // app.use(morgan("combined"));
-    // app.use((req, res, next) => logReqResUtil(req, res, next));
+    // app.use((req, res, next) => logRequestResponseUtil(req, res, next));
     app.use(routes());
 
     app.listen(4444, () => {

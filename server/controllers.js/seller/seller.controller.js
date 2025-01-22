@@ -69,7 +69,7 @@ export const loginController = async (req, res) => {
     }
 
     const accessToken = generateAccessToken(seller._id, seller.email, 2);
-    const refreshToken = generateRefreshToken(seller._id);
+    const refreshToken = generateRefreshToken(seller._id, seller.email, 2);
 
     const {
         password,

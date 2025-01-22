@@ -9,7 +9,7 @@ export const generateAccessToken = (id, email, role) => {
             iss: "ApexShop",
             sub: email,
             aud: ["all"],
-            nbf: Math.floor(Date.now() / 1000),
+            nbf: Date.now(),
             iat: Date.now(),
             jti: nanoid(),
             role: role,
@@ -19,8 +19,20 @@ export const generateAccessToken = (id, email, role) => {
     );
 };
 
-export const generateRefreshToken = (id) => {
-    return jwt.sign({ id: id }, config.refreshTokenSecret, {
-        expiresIn: config.refreshTokenExpiry,
-    });
+export const generateRefreshToken = (id, email, role) => {
+    return jwt.sign(
+        {
+            iss: "ApexShop",
+            sub: email,
+            aud: ["all"],
+            nbf: Date.now(),
+            iat: Date.now(),
+            jti: nanoid(),
+            role: role,
+        },
+        config.refreshTokenSecret,
+        {
+            expiresIn: config.refreshTokenExpiry,
+        }
+    );
 };
