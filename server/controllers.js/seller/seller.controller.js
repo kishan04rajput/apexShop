@@ -38,6 +38,8 @@ export const signupController = async (req, res) => {
     );
 
     const response = await createNewSellerSvc(email, hashedPassword, salt);
+    req.user = response;
+    req.user.id = response._id;
     if (!response) {
         return handleErrorResUtil(res, 409, "failed", "internal server error!");
     }

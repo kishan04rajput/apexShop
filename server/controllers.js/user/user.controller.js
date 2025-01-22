@@ -39,7 +39,9 @@ export const signupController = async (req, res) => {
 
     const response = await createNewUserSvc(email, hashedPassword, salt);
 
-    // console.log(response);
+    // console.log(response._id);
+    req.user = response;
+    req.user.id = response._id;
     if (!response) {
         return handleErrorResUtil(res, 409, "failed", "internal server error!");
     }
