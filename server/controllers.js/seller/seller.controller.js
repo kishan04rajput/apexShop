@@ -70,8 +70,16 @@ export const loginController = async (req, res) => {
         return handleErrorResUtil(res, 401, "failed", "Wrong password!");
     }
 
-    const accessToken = generateAccessToken(seller._id, seller.email, 2);
-    const refreshToken = generateRefreshToken(seller._id, seller.email, 2);
+    const accessToken = generateAccessToken(
+        seller._id,
+        seller.email,
+        seller.type
+    );
+    const refreshToken = generateRefreshToken(
+        seller._id,
+        seller.email,
+        seller.type
+    );
 
     const {
         password,
