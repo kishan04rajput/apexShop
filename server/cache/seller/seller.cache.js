@@ -10,7 +10,7 @@ export const setSellerInCache = async (seller) => {
     if (!seller?.email) {
         throw "Invalid seller";
     }
-    let client = await getSellerCacheInstance(config.sellerCacheDbIndex);
+    let client = await getSellerCacheInstance(config);
 
     let stringifiedSeller = JSON.stringify(seller);
 
@@ -24,7 +24,7 @@ export const getSellerFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient(config.sellerCacheDbIndex);
+    let client = await getSellerCacheInstance(config);
 
     let stringifiedSeller = await client.get(getSellerCacheKey(email));
     if (!stringifiedSeller) {

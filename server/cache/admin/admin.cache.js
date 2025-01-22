@@ -1,4 +1,5 @@
 import { getConfig } from "../../config/config.js";
+import { getAdminCacheInstance } from "../../factory/cache.factory.js";
 import { getCacheClient } from "../config.cache.js";
 
 const config = getConfig();
@@ -10,7 +11,7 @@ export const setAdminInCache = async (admin) => {
     if (!admin?.email) {
         throw "Invalid admin";
     }
-    let client = await getCacheClient(adminDbIndex);
+    let client = await getAdminCacheInstance(config);
 
     let stringifiedAdmin = JSON.stringify(admin);
 
@@ -24,7 +25,7 @@ export const getAdminFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient(adminDbIndex);
+    let client = await getAdminCacheInstance(config);
 
     let stringifiedAdmin = await client.get(getAdminCacheKey(email));
     if (!stringifiedAdmin) {

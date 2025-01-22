@@ -15,14 +15,15 @@ const main = async () => {
     app.use(express.json());
     app.use(cookieParser());
     // app.use(morgan("combined"));
-    app.use((req, res, next) => logReqResUtil(req, res, next));
+    // app.use((req, res, next) => logReqResUtil(req, res, next));
     app.use(routes());
 
     app.listen(4444, () => {
-        logger.info(`Server started on port 4444!`, "asdsad", { port: 4444 }, [
-            "bdfsdf",
-            "sdfsdf",
-        ]);
+        // logger.info(`Server started on port 4444!`, "asdsad", { port: 4444 }, [
+        //     "bdfsdf",
+        //     "sdfsdf",
+        // ]);
+        logger.info(`Server started on port 4444!`);
     });
 };
 

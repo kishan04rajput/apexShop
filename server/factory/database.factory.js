@@ -5,7 +5,7 @@ import logger from "../utilities/logger.util.js";
 var instanceObj = {};
 export const setupDatabaseFactory = async (config) => {
     if (Object.keys(instanceObj).length == 0) {
-        await getCacheClient();
+        // await getCacheClient();
         await getUserMongoInstance(config);
         await getSellerMongoInstance(config);
         await getAdminMongoInstance(config);

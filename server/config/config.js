@@ -22,8 +22,23 @@ export const setupConfig = () => {
     let sellerCacheDbIndex = process.env.SELLER_CACHE_DB_INDEX || "1";
     let adminCacheDbIndex = process.env.ADMIN_CACHE_DB_INDEX || "2";
     let crCacheDbIndex = process.env.CR_CACHE_DB_INDEX || "3";
+    let cacheUriUser = process.env.CACHE_URI_USER;
+    let cacheUriSeller = process.env.CACHE_URI_SELLER;
+    let cacheUriAdmin = process.env.CACHE_URI_ADMIN;
+    let cacheUriCr = process.env.CACHE_URI_CR;
 
     // check mandatory env variables
+
+    !cacheUriSeller
+        ? err.push("CACHE_URI_USER")
+        : (config.cacheUriSeller = cacheUriSeller);
+    !cacheUriAdmin
+        ? err.push("CACHE_URI_USER")
+        : (config.cacheUriAdmin = cacheUriAdmin);
+    !cacheUriCr ? err.push("CACHE_URI_USER") : (config.cacheUriCr = cacheUriCr);
+    !cacheUriUser
+        ? err.push("CACHE_URI_USER")
+        : (config.cacheUriUser = cacheUriUser);
     !mongoUserUri
         ? err.push("MONGO_URI_USER")
         : (config.mongoUserUri = mongoUserUri);

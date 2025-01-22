@@ -1,4 +1,5 @@
 import { getConfig } from "../../config/config.js";
+import { getCrCacheInstance } from "../../factory/cache.factory.js";
 import { getCacheClient } from "../config.cache.js";
 
 const config = getConfig();
@@ -10,7 +11,7 @@ export const setCrInCache = async (cr) => {
     if (!cr?.email) {
         throw "Invalid cr";
     }
-    let client = await getCacheClient(crDbIndex);
+    let client = await getCrCacheInstance(config);
 
     let stringifiedCr = JSON.stringify(cr);
 
@@ -24,7 +25,7 @@ export const getCrFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getCacheClient(crDbIndex);
+    let client = await getCrCacheInstance(config);
 
     let stringifiedCr = await client.get(getCrCacheKey(email));
     if (!stringifiedCr) {

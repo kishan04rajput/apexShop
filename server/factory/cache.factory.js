@@ -18,7 +18,7 @@ export const getUserCacheInstance = async (config) => {
     if (!!cacheInstanceObj?.userCache) {
         return cacheInstanceObj.userCache;
     }
-    let userCache = await getCacheClient(config.userCacheDbIndex);
+    let userCache = await getCacheClient(config.cacheUriUser);
     if (!!userCache) {
         logger.info("User cache connected successfully");
         cacheInstanceObj.userCache = userCache;
@@ -31,7 +31,7 @@ export const getSellerCacheInstance = async (config) => {
     if (!!cacheInstanceObj?.sellerCache) {
         return cacheInstanceObj.sellerCache;
     }
-    let sellerCache = await getCacheClient(config.sellerCacheDbIndex);
+    let sellerCache = await getCacheClient(config.cacheUriSeller);
     if (!!sellerCache) {
         logger.info("Seller cache connected successfully");
         cacheInstanceObj.sellerCache = sellerCache;
@@ -44,7 +44,7 @@ export const getAdminCacheInstance = async (config) => {
     if (!!cacheInstanceObj?.adminCache) {
         return cacheInstanceObj.adminCache;
     }
-    let adminCache = await getCacheClient(config.adminCacheDbIndex);
+    let adminCache = await getCacheClient(config.cacheUriAdmin);
     if (!!adminCache) {
         logger.info("Admin cache connected successfully");
         cacheInstanceObj.adminCache = adminCache;
@@ -57,7 +57,7 @@ export const getCrCacheInstance = async (config) => {
     if (!!cacheInstanceObj?.crCache) {
         return cacheInstanceObj.crCache;
     }
-    let crCache = await getCacheClient(config.crCacheDbIndex);
+    let crCache = await getCacheClient(config.cacheUriCr);
     if (!!crCache) {
         logger.info("CR cache connected successfully");
         cacheInstanceObj.crCache = crCache;
