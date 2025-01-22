@@ -1,3 +1,4 @@
+import { setAccessTokenInCacheSeller } from "../../cache/seller/seller.cache.js";
 import {
     checkIfSellerExistSvc,
     compareSellerPasswordSvc,
@@ -70,7 +71,7 @@ export const loginController = async (req, res) => {
         return handleErrorResUtil(res, 401, "failed", "Wrong password!");
     }
 
-    const accessToken = generateAccessToken(
+    const [accessToken, accessTokenJti] = generateAccessToken(
         seller._id,
         seller.email,
         seller.type
@@ -79,6 +80,11 @@ export const loginController = async (req, res) => {
         seller._id,
         seller.email,
         seller.type
+    );
+
+    await setAccessTokenInCacheSeller(
+        `seller:jwt:token:Access:${seller.email}`,
+        `${accessTokenJti}:${accessToken}`
     );
 
     const {

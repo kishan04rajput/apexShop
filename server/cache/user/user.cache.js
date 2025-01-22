@@ -33,6 +33,12 @@ export const getUserFromCache = async (email) => {
     return user;
 };
 
+export const setAccessTokenInCacheUser = async (key, accessToken) => {
+    let client = await getUserCacheInstance(config);
+    await client.set(key, accessToken);
+    await client.expire(key, config.userCacheTtl);
+};
+
 const getUserCacheKey = (email) => {
     return prefixUserInfo + email;
 };

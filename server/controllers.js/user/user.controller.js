@@ -1,3 +1,4 @@
+import { setAccessTokenInCacheUser } from "../../cache/user/user.cache.js";
 import {
     checkIfUserExistSvc,
     compareUserPasswordSvc,
@@ -75,8 +76,17 @@ export const loginController = async (req, res) => {
         return handleErrorResUtil(res, 401, "failed", "Wrong password!");
     }
 
-    const accessToken = generateAccessToken(user._id, user.email, user.type);
+    const [accessToken, accessTokenJti] = generateAccessToken(
+        user._id,
+        user.email,
+        user.type
+    );
     const refreshToken = generateRefreshToken(user._id, user.email, user.type);
+
+    await setAccessTokenInCacheUser(
+        `user:jwt:token:Access:${user.email}`,
+        `${accessTokenJti}:${accessToken}`
+    );
 
     const {
         password,

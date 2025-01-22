@@ -34,6 +34,12 @@ export const getSellerFromCache = async (email) => {
     return seller;
 };
 
+export const setAccessTokenInCacheSeller = async (key, accessToken) => {
+    let client = await getSellerCacheInstance(config);
+    await client.set(key, accessToken);
+    await client.expire(key, config.userCacheTtl);
+};
+
 const getSellerCacheKey = (email) => {
     return prefixSellerInfo + email;
 };
