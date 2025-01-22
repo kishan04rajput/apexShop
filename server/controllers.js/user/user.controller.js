@@ -6,6 +6,7 @@ import {
     userProfileUpdateSvc,
 } from "../../services/user/user.service.js";
 import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
+import { decryptPassword } from "../../utilities/decryptPassword.util.js";
 import {
     generateAccessToken,
     generateRefreshToken,
@@ -18,7 +19,7 @@ import {
 
 export const signupController = async (req, res) => {
     logger.info(req);
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     const email = req?.body?.email;
 
     let isUserExist = await checkIfUserExistSvc(email);
@@ -37,6 +38,8 @@ export const signupController = async (req, res) => {
     );
 
     const response = await createNewUserSvc(email, hashedPassword, salt);
+
+    // console.log(response);
     if (!response) {
         return handleErrorResUtil(res, 409, "failed", "internal server error!");
     }
@@ -53,7 +56,7 @@ export const loginController = async (req, res) => {
     // logger.info(req);
     // console.log(req);
 
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     const email = req?.body?.email;
 
     const user = await checkIfUserExistSvc(email);
@@ -136,7 +139,7 @@ export const userProfileUpdateController = async (req, res) => {
 
 export const userUpdatePassword = async (req, res) => {
     let email = req?.user?.email;
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     try {
         const [hashedPassword, salt] = await createHashedPasswordUtil(
             myPlaintextPassword

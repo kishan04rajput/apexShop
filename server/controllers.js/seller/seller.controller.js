@@ -6,6 +6,7 @@ import {
     sellerProfileUpdateSvc,
 } from "../../services/seller/seller.service.js";
 import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
+import { decryptPassword } from "../../utilities/decryptPassword.util.js";
 import {
     generateAccessToken,
     generateRefreshToken,
@@ -18,7 +19,7 @@ import {
 
 export const signupController = async (req, res) => {
     // logger.info(req);
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     const email = req?.body?.email;
 
     let isSellerExist = await checkIfSellerExistSvc(email);
@@ -50,7 +51,7 @@ export const signupController = async (req, res) => {
 };
 
 export const loginController = async (req, res) => {
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     const email = req?.body?.email;
 
     const seller = await checkIfSellerExistSvc(email);
@@ -132,7 +133,7 @@ export const sellerProfileUpdateController = async (req, res) => {
 
 export const sellerUpdatePassword = async (req, res) => {
     let email = req?.user?.email;
-    const myPlaintextPassword = req?.body?.password;
+    const myPlaintextPassword = decryptPassword(req?.body?.password);
     try {
         const [hashedPassword, salt] = await createHashedPasswordUtil(
             myPlaintextPassword
