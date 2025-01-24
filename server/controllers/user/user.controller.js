@@ -17,10 +17,21 @@ import {
     handleErrorResponseUtility,
     handleSuccessResponseUtility,
 } from "../../utilities/response.util.js";
+import { passwordRulesValidationUtility } from "../../utilities/validationRules.util.js";
 
 export const signupUserController = async (request, response) => {
     logger.info(request);
     const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const passwordFollowsRules =
+        passwordRulesValidationUtility(plainTextPassword);
+    // if (passwordFollowsRules.length > 0) {
+    //     return handleErrorResponseUtility(
+    //         response,
+    //         404,
+    //         "failed",
+    //         passwordFollowsRules
+    //     );
+    // }
     const email = request?.body?.email;
 
     let userExists = await checkIfUserExistsService(email);

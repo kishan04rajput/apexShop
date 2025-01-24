@@ -46,3 +46,25 @@ export const updateProfileValidationRulesUtility = [
 export const updatePasswordValidationRulesUtility = [
     body("password").exists().withMessage("Password is required"),
 ];
+
+export const passwordRulesValidationUtility = (password) => {
+    const errors = [];
+
+    if (password.length < 6 || password.length > 20) {
+        errors.push("Password must be between 6 to 20 characters.");
+    }
+    if (!/[A-Z]/.test(password)) {
+        errors.push("Password must contain at least one uppercase letter.");
+    }
+    if (!/[a-z]/.test(password)) {
+        errors.push("Password must contain at least one lowercase letter.");
+    }
+    if (!/\d/.test(password)) {
+        errors.push("Password must contain at least one number.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        errors.push("Password must contain at least one special character.");
+    }
+
+    return errors;
+};
