@@ -46,7 +46,7 @@ export const signupUserController = async (request, response) => {
     if (!createdUser) {
         return handleErrorResponseUtility(
             response,
-            409,
+            500,
             "failed",
             "Internal server error!"
         );
@@ -54,7 +54,7 @@ export const signupUserController = async (request, response) => {
 
     return handleSuccessResponseUtility(
         response,
-        200,
+        201,
         "success",
         "User created successfully!"
     );
@@ -122,7 +122,7 @@ export const loginUserController = async (request, response) => {
         response,
         200,
         "success",
-        "User logged in",
+        "User logged in successfully",
         {
             ApexShopAccessToken: accessToken,
             ...otherDetails,
@@ -137,7 +137,7 @@ export const getUserDetailsController = async (request, response) => {
         return handleErrorResponseUtility(
             response,
             404,
-            "failed!",
+            "failed",
             "User not found!"
         );
     }
@@ -155,7 +155,7 @@ export const getUserDetailsController = async (request, response) => {
         response,
         200,
         "success",
-        "Data fetched successfully",
+        "User details fetched successfully",
         otherDetails
     );
 };
@@ -168,7 +168,7 @@ export const updateUserProfileController = async (request, response) => {
         // console.log(updateResponse.error);
         return handleErrorResponseUtility(
             response,
-            404,
+            400,
             "failed",
             updateResponse.error
         );
@@ -179,7 +179,7 @@ export const updateUserProfileController = async (request, response) => {
         response,
         200,
         "success",
-        "Data updated successfully",
+        "User profile updated successfully",
         updatedData
     );
 };
@@ -202,7 +202,7 @@ export const updateUserPasswordController = async (request, response) => {
             return handleErrorResponseUtility(
                 response,
                 500,
-                "error",
+                "failed",
                 "An unexpected error occurred"
             );
         }
@@ -210,14 +210,14 @@ export const updateUserPasswordController = async (request, response) => {
             response,
             200,
             "success",
-            "Password updated"
+            "User password updated successfully"
         );
     } catch (error) {
         logger.error(error);
         return handleErrorResponseUtility(
             response,
             500,
-            "error",
+            "failed",
             "An unexpected error occurred",
             `error---->${error}`
         );

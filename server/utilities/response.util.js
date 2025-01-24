@@ -16,7 +16,7 @@ export const handleErrorResponseUtility = (
 
 export const handleSuccessResponseUtility = (
     response,
-    httpCode = 400,
+    httpCode = 200,
     status,
     message,
     data = null

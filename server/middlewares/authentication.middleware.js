@@ -16,9 +16,9 @@ export const authenticationMiddleware = async (
     if (!token) {
         return handleErrorResponseUtility(
             response,
-            404,
+            401,
             "failed",
-            "Please Login!"
+            "Access token missing. Please login!"
         );
     }
 
@@ -29,9 +29,9 @@ export const authenticationMiddleware = async (
     if (!decodedToken) {
         return handleErrorResponseUtility(
             response,
-            404,
+            401,
             "failed",
-            "Please login again!"
+            "Invalid token. Please login again!"
         );
     }
 
@@ -43,7 +43,7 @@ export const authenticationMiddleware = async (
             response,
             404,
             "failed",
-            "User Not Found!"
+            "User not found!"
         );
     }
 
