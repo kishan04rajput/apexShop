@@ -1,13 +1,20 @@
 import { validationResult } from "express-validator";
-import { handleErrorResUtil } from "../utilities/response.util.js";
+import { handleErrorResponseUtility } from "../utilities/response.util.js";
 
-export const validateReqMW = (validations) => {
-    return async (req, res, next) => {
-        await Promise.all(validations.map((validation) => validation.run(req)));
-        const errors = validationResult(req);
+export const validateRequestMiddleware = (validations) => {
+    return async (request, response, nextFunction) => {
+        await Promise.all(
+            validations.map((validation) => validation.run(request))
+        );
+        const errors = validationResult(request);
         if (errors.isEmpty()) {
-            return next();
+            return nextFunction();
         }
-        return handleErrorResUtil(res, 400, "failed", errors.array()[0]);
+        return handleErrorResponseUtility(
+            response,
+            400,
+            "failed",
+            errors.array()[0]
+        );
     };
 };

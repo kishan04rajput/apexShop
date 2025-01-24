@@ -2,11 +2,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import {
-    convertToSellerDBObj,
-    createNewSellerDB,
-    findSellerUsingEmailDB,
-    saveSellerRefreshTokenDB,
-    sellerProfileUpdateDB,
+    convertToSellerDatabaseObject,
+    createNewSellerInDatabase,
+    findSellerByEmailInDatabase,
+    saveSellerRefreshTokenInDatabase,
+    updateSellerProfileInDatabase,
 } from "../../database/seller/seller.database.js";
 import { getSellerModel } from "../../models/seller.model.js";
 import {
@@ -14,21 +14,21 @@ import {
     setSellerInCache,
 } from "../../cache/seller/seller.cache.js";
 
-export const checkIfSellerExistSvc = async (email) => {
+export const checkIfSellerExistsService = async (email) => {
     let seller = await getSellerFromCache(email);
     if (!seller) {
-        seller = await findSellerUsingEmailDB(email);
+        seller = await findSellerByEmailInDatabase(email);
         if (!seller) {
             return null;
         }
 
         await setSellerInCache(seller);
     }
-    seller = convertToSellerDBObj(seller);
+    seller = convertToSellerDatabaseObject(seller);
     return seller;
 };
 
-export const createNewSellerSvc = async (email, password, salt) => {
+export const createNewSellerService = async (email, password, salt) => {
     const sellerModel = await getSellerModel();
     const newSeller = new sellerModel({
         email,
@@ -36,29 +36,32 @@ export const createNewSellerSvc = async (email, password, salt) => {
         salt,
     });
 
-    return await createNewSellerDB(newSeller);
+    return await createNewSellerInDatabase(newSeller);
 };
 
-export const compareSellerPasswordSvc = async (sellerPassword, dbPassword) => {
-    return bcrypt.compareSync(sellerPassword, dbPassword);
+export const compareSellerPasswordService = async (
+    sellerPassword,
+    databasePassword
+) => {
+    return bcrypt.compareSync(sellerPassword, databasePassword);
 };
 
-export const saveSellerRefreshTokenSvc = async (seller, refreshToken) => {
+export const saveSellerRefreshTokenService = async (seller, refreshToken) => {
     seller.refreshToken = refreshToken;
-    return await saveSellerRefreshTokenDB(seller);
+    return await saveSellerRefreshTokenInDatabase(seller);
 };
 
-export const decodeSellerJwtTokenSvc = async (jwtToken, key) => {
-    // TODO: change name to suitable name which can justify it's function
+export const decodeSellerJwtTokenService = async (jwtToken, secretKey) => {
+    // TODO: change name to suitable name which can justify its function
     try {
-        return jwt.verify(jwtToken, key);
-    } catch (e) {
+        return jwt.verify(jwtToken, secretKey);
+    } catch (error) {
         return null;
     }
 };
 
-export const sellerProfileUpdateSvc = async (email, updatedData) => {
-    let seller = await checkIfSellerExistSvc(email);
+export const updateSellerProfileService = async (email, updatedData) => {
+    let seller = await checkIfSellerExistsService(email);
     if (!seller) {
         return { error: "Seller Not Found!" };
     }
@@ -95,5 +98,5 @@ export const sellerProfileUpdateSvc = async (email, updatedData) => {
     updatedData.Country ? (seller.Country = updatedData.Country) : null;
     updatedData.state ? (seller.state = updatedData.state) : null;
     updatedData.city ? (seller.city = updatedData.city) : null;
-    return await sellerProfileUpdateDB(seller);
+    return await updateSellerProfileInDatabase(seller);
 };

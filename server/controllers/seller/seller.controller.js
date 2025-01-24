@@ -1,82 +1,101 @@
 import { setAccessTokenInCacheSeller } from "../../cache/seller/seller.cache.js";
 import {
-    checkIfSellerExistSvc,
-    compareSellerPasswordSvc,
-    createNewSellerSvc,
-    saveSellerRefreshTokenSvc,
-    sellerProfileUpdateSvc,
+    checkIfSellerExistsService,
+    compareSellerPasswordService,
+    createNewSellerService,
+    saveSellerRefreshTokenService,
+    updateSellerProfileService,
 } from "../../services/seller/seller.service.js";
-import { createHashedPasswordUtil } from "../../utilities/createHashedPassword.util.js";
-import { decryptPassword } from "../../utilities/decryptPassword.util.js";
+import { createHashedPasswordUtility } from "../../utilities/createHashedPassword.util.js";
+import { decryptPasswordUtility } from "../../utilities/decryptPassword.util.js";
 import {
-    generateAccessToken,
-    generateRefreshToken,
+    generateAccessTokenUtility,
+    generateRefreshTokenUtility,
 } from "../../utilities/jwt.util.js";
 import logger from "../../utilities/logger.util.js";
 import {
-    handleErrorResUtil,
-    handleSuccessResUtil,
+    handleErrorResponseUtility,
+    handleSuccessResponseUtility,
 } from "../../utilities/response.util.js";
 
-export const signupController = async (req, res) => {
+export const signupSellerController = async (request, response) => {
     // logger.info(req);
-    const myPlaintextPassword = decryptPassword(req?.body?.password);
-    const email = req?.body?.email;
+    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const email = request?.body?.email;
 
-    let isSellerExist = await checkIfSellerExistSvc(email);
+    let sellerExists = await checkIfSellerExistsService(email);
 
-    if (isSellerExist) {
-        return handleErrorResUtil(
-            res,
+    if (sellerExists) {
+        return handleErrorResponseUtility(
+            response,
             409,
             "failed",
-            "seller already exist in system"
+            "Seller already exists in the system"
         );
     }
 
-    const [hashedPassword, salt] = await createHashedPasswordUtil(
-        myPlaintextPassword
+    const [hashedPassword, salt] = await createHashedPasswordUtility(
+        plainTextPassword
     );
 
-    const response = await createNewSellerSvc(email, hashedPassword, salt);
-    req.user = response;
-    req.user.id = response._id;
-    if (!response) {
-        return handleErrorResUtil(res, 409, "failed", "internal server error!");
+    const createdSeller = await createNewSellerService(
+        email,
+        hashedPassword,
+        salt
+    );
+    request.user = createdSeller;
+    request.user.id = createdSeller._id;
+    if (!createdSeller) {
+        return handleErrorResponseUtility(
+            response,
+            409,
+            "failed",
+            "Internal server error!"
+        );
     }
 
-    return handleSuccessResUtil(
-        res,
+    return handleSuccessResponseUtility(
+        response,
         200,
         "success",
         "Seller created successfully!"
     );
 };
 
-export const loginController = async (req, res) => {
-    const myPlaintextPassword = decryptPassword(req?.body?.password);
-    const email = req?.body?.email;
+export const loginSellerController = async (request, response) => {
+    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const email = request?.body?.email;
 
-    const seller = await checkIfSellerExistSvc(email);
+    const seller = await checkIfSellerExistsService(email);
     if (!seller) {
-        return handleErrorResUtil(res, 404, "failed", "No seller found!");
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            "No seller found!"
+        );
     }
 
-    const isPasswordCorrect = await compareSellerPasswordSvc(
-        myPlaintextPassword,
+    const isPasswordCorrect = await compareSellerPasswordService(
+        plainTextPassword,
         seller.password
     );
 
     if (!isPasswordCorrect) {
-        return handleErrorResUtil(res, 401, "failed", "Wrong password!");
+        return handleErrorResponseUtility(
+            response,
+            401,
+            "failed",
+            "Wrong password!"
+        );
     }
 
-    const [accessToken, accessTokenJti] = generateAccessToken(
+    const [accessToken, accessTokenJti] = generateAccessTokenUtility(
         seller._id,
         seller.email,
         seller.type
     );
-    const refreshToken = generateRefreshToken(
+    const refreshToken = generateRefreshTokenUtility(
         seller._id,
         seller.email,
         seller.type
@@ -96,19 +115,30 @@ export const loginController = async (req, res) => {
         salt,
         ...otherDetails
     } = seller._doc;
-    req.user = seller._doc;
-    req.user.id = _id;
-    return handleSuccessResUtil(res, 200, "success", "seller loggedin", {
-        ApexShopAccessToken: accessToken,
-        ...otherDetails,
-    });
+    request.user = seller._doc;
+    request.user.id = _id;
+    return handleSuccessResponseUtility(
+        response,
+        200,
+        "success",
+        "Seller logged in",
+        {
+            ApexShopAccessToken: accessToken,
+            ...otherDetails,
+        }
+    );
 };
 
-export const getSellerDetailsController = async (req, res) => {
-    let seller = req.user;
+export const getSellerDetailsController = async (request, response) => {
+    let seller = request.user;
 
     if (!seller) {
-        return handleErrorResUtil(res, 404, "failed!", "Seller not found!");
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed!",
+            "Seller not found!"
+        );
     }
     const {
         password,
@@ -120,68 +150,76 @@ export const getSellerDetailsController = async (req, res) => {
         ...otherDetails
     } = seller._doc;
 
-    return handleSuccessResUtil(
-        res,
+    return handleSuccessResponseUtility(
+        response,
         200,
         "success",
-        "data fetched successfully",
+        "Data fetched successfully",
         otherDetails
     );
 };
 
-export const sellerProfileUpdateController = async (req, res) => {
-    let email = req?.user?.email;
-    let updatedData = req.body;
+export const updateSellerProfileController = async (request, response) => {
+    let email = request?.user?.email;
+    let updatedData = request.body;
 
-    let response = await sellerProfileUpdateSvc(email, updatedData);
-    if (response.error) {
-        return handleErrorResUtil(res, 404, "failed", response.error);
+    let updateResponse = await updateSellerProfileService(email, updatedData);
+    if (updateResponse.error) {
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            updateResponse.error
+        );
     }
 
-    return handleSuccessResUtil(
-        res,
+    return handleSuccessResponseUtility(
+        response,
         200,
         "success",
-        "data updated successfully",
+        "Data updated successfully",
         updatedData
     );
 };
 
-export const sellerUpdatePassword = async (req, res) => {
-    let email = req?.user?.email;
-    const myPlaintextPassword = decryptPassword(req?.body?.password);
+export const updateSellerPasswordController = async (request, response) => {
+    let email = request?.user?.email;
+    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
     try {
-        const [hashedPassword, salt] = await createHashedPasswordUtil(
-            myPlaintextPassword
+        const [hashedPassword, salt] = await createHashedPasswordUtility(
+            plainTextPassword
         );
 
         let updatedData = {
             password: hashedPassword,
             salt,
         };
-        let response = await sellerProfileUpdateSvc(email, updatedData);
-        if (!response) {
-            return handleErrorResUtil(
-                res,
+        let updateResponse = await updateSellerProfileService(
+            email,
+            updatedData
+        );
+        if (!updateResponse) {
+            return handleErrorResponseUtility(
+                response,
                 500,
                 "error",
                 "An unexpected error occurred"
             );
         }
-        return handleSuccessResUtil(
-            res,
+        return handleSuccessResponseUtility(
+            response,
             200,
             "success",
-            "password updated successfully"
+            "Password updated successfully"
         );
-    } catch (err) {
-        logger.error(`err from sellerUpdatePasswordController \n ${err}`);
-        return handleErrorResUtil(
-            res,
+    } catch (error) {
+        logger.error(`Error from updateSellerPasswordController \n ${error}`);
+        return handleErrorResponseUtility(
+            response,
             500,
             "error",
             "An unexpected error occurred",
-            `error---->${err}`
+            `error---->${error}`
         );
     }
 };

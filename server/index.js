@@ -1,22 +1,24 @@
 import "dotenv/config";
 import express from "express";
-import { routes } from "./routes/router.js";
+import { setupRoutes } from "./routes/router.js";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { setupFactory } from "./factory/factory.js";
-import { setupConfig } from "./config/config.js";
-import logger, { logRequestResponseUtil } from "./utilities/logger.util.js";
+import { setupConfiguration } from "./configuration/configuration.js";
+import logger, { logRequestResponseUtility } from "./utilities/logger.util.js";
 
 const main = async () => {
-    let config = setupConfig();
-    if (!(await setupFactory(config))) return;
+    let configuration = setupConfiguration();
+    if (!(await setupFactory(configuration))) return;
 
     const app = express();
     app.use(express.json());
     app.use(cookieParser());
     // app.use(morgan("combined"));
-    app.use((req, res, next) => logRequestResponseUtil(req, res, next));
-    app.use(routes());
+    app.use((request, response, nextFunction) =>
+        logRequestResponseUtility(request, response, nextFunction)
+    );
+    app.use(setupRoutes());
 
     app.listen(4444, () => {
         // logger.info(`Server started on port 4444!`, "asdsad", { port: 4444 }, [

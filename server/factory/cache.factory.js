@@ -1,67 +1,70 @@
 import { getCacheClient } from "../cache/config.cache.js";
 import logger from "../utilities/logger.util.js";
 
-var cacheInstanceObj = {};
+var cacheInstanceObject = {};
 
-export const setupCacheFactory = async (config) => {
-    if (Object.keys(cacheInstanceObj).length == 0) {
+export const setupCacheFactory = async (configuration) => {
+    if (Object.keys(cacheInstanceObject).length == 0) {
         // await getCacheClient();
-        await getUserCacheInstance(config);
-        await getSellerCacheInstance(config);
-        await getAdminCacheInstance(config);
-        await getCrCacheInstance(config);
+        await getUserCacheInstance(configuration);
+        await getSellerCacheInstance(configuration);
+        await getAdminCacheInstance(configuration);
+        await getCustomerRelationshipCacheInstance(configuration);
     }
     return true;
 };
 
-export const getUserCacheInstance = async (config) => {
-    if (!!cacheInstanceObj?.userCache) {
-        return cacheInstanceObj.userCache;
+export const getUserCacheInstance = async (configuration) => {
+    if (!!cacheInstanceObject?.userCache) {
+        return cacheInstanceObject.userCache;
     }
-    let userCache = await getCacheClient(config.cacheUriUser);
+    let userCache = await getCacheClient(configuration.cacheUriUser);
     if (!!userCache) {
         logger.info("User cache connected successfully");
-        cacheInstanceObj.userCache = userCache;
+        cacheInstanceObject.userCache = userCache;
         return userCache;
     }
-    throw "User cache connect error";
+    throw "User cache connection error";
 };
 
-export const getSellerCacheInstance = async (config) => {
-    if (!!cacheInstanceObj?.sellerCache) {
-        return cacheInstanceObj.sellerCache;
+export const getSellerCacheInstance = async (configuration) => {
+    if (!!cacheInstanceObject?.sellerCache) {
+        return cacheInstanceObject.sellerCache;
     }
-    let sellerCache = await getCacheClient(config.cacheUriSeller);
+    let sellerCache = await getCacheClient(configuration.cacheUriSeller);
     if (!!sellerCache) {
         logger.info("Seller cache connected successfully");
-        cacheInstanceObj.sellerCache = sellerCache;
+        cacheInstanceObject.sellerCache = sellerCache;
         return sellerCache;
     }
-    throw "Seller cache connect error";
+    throw "Seller cache connection error";
 };
 
-export const getAdminCacheInstance = async (config) => {
-    if (!!cacheInstanceObj?.adminCache) {
-        return cacheInstanceObj.adminCache;
+export const getAdminCacheInstance = async (configuration) => {
+    if (!!cacheInstanceObject?.adminCache) {
+        return cacheInstanceObject.adminCache;
     }
-    let adminCache = await getCacheClient(config.cacheUriAdmin);
+    let adminCache = await getCacheClient(configuration.cacheUriAdmin);
     if (!!adminCache) {
         logger.info("Admin cache connected successfully");
-        cacheInstanceObj.adminCache = adminCache;
+        cacheInstanceObject.adminCache = adminCache;
         return adminCache;
     }
-    throw "Admin cache connect error";
+    throw "Admin cache connection error";
 };
 
-export const getCrCacheInstance = async (config) => {
-    if (!!cacheInstanceObj?.crCache) {
-        return cacheInstanceObj.crCache;
+export const getCustomerRelationshipCacheInstance = async (configuration) => {
+    if (!!cacheInstanceObject?.customerRelationshipCache) {
+        return cacheInstanceObject.customerRelationshipCache;
     }
-    let crCache = await getCacheClient(config.cacheUriCr);
-    if (!!crCache) {
-        logger.info("CR cache connected successfully");
-        cacheInstanceObj.crCache = crCache;
-        return crCache;
+    let customerRelationshipCache = await getCacheClient(
+        configuration.cacheUriCustomerRelationship
+    );
+    if (!!customerRelationshipCache) {
+        logger.info("Customer relationship cache connected successfully");
+        cacheInstanceObject.customerRelationshipCache =
+            customerRelationshipCache;
+        return customerRelationshipCache;
     }
-    throw "CR cache connect error";
+    throw "Customer relationship cache connection error";
 };

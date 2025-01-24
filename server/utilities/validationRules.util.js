@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const loginValidationRulesUtil = [
+export const loginValidationRulesUtility = [
     body("email")
         .exists()
         .isEmail()
@@ -8,7 +8,7 @@ export const loginValidationRulesUtil = [
     body("password").exists().withMessage("Password is required"),
 ];
 
-export const signupValidationRulesUtil = [
+export const signupValidationRulesUtility = [
     body("email")
         .exists()
         .isEmail()
@@ -16,7 +16,7 @@ export const signupValidationRulesUtil = [
     body("password").exists().withMessage("Password is required"),
 ];
 
-export const updateProfileValidationRulesUtil = [
+export const updateProfileValidationRulesUtility = [
     body("phone")
         .optional({ checkFalsy: true })
         .isMobilePhone()
@@ -43,6 +43,6 @@ export const updateProfileValidationRulesUtil = [
         .withMessage("City must be a valid string"),
 ];
 
-export const updatePasswordValidationRulesUtil = [
+export const updatePasswordValidationRulesUtility = [
     body("password").exists().withMessage("Password is required"),
 ];

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import logger from "../utilities/logger.util.js";
 
-export const connectMongoDB = async (uri) => {
+export const connectToMongoDatabase = async (connectionUri) => {
     try {
-        let instance = new mongoose.Mongoose();
-        return await instance.connect(uri);
+        let mongooseInstance = new mongoose.Mongoose();
+        return await mongooseInstance.connect(connectionUri);
     } catch (error) {
-        // console.error(uri, "\n", error);
-        logger.error(uri, "\n", error);
+        // console.error(connectionUri, "\n", error);
+        logger.error(connectionUri, "\n", error);
         return null;
     }
 };

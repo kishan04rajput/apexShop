@@ -1,49 +1,49 @@
 import {
     getSellerDetailsController,
-    loginController,
-    signupController,
-    sellerProfileUpdateController,
-    sellerUpdatePassword,
+    updateSellerProfileController,
+    updateSellerPasswordController,
+    signupSellerController,
+    loginSellerController,
 } from "../../controllers/seller/seller.controller.js";
 import { authenticationMiddleware } from "../../middlewares/authentication.middleware.js";
 import express from "express";
-import { validateReqMW } from "../../middlewares/validateRequest.middleware.js";
+import { validateRequestMiddleware } from "../../middlewares/validateRequest.middleware.js";
 import {
-    loginValidationRulesUtil,
-    signupValidationRulesUtil,
-    updatePasswordValidationRulesUtil,
-    updateProfileValidationRulesUtil,
+    loginValidationRulesUtility,
+    signupValidationRulesUtility,
+    updatePasswordValidationRulesUtility,
+    updateProfileValidationRulesUtility,
 } from "../../utilities/validationRules.util.js";
 
 export function sellerRoutes(router) {
-    const sellerRoutes = express.Router();
+    const sellerRouter = express.Router();
 
-    sellerRoutes.post(
+    sellerRouter.post(
         "/signup",
-        validateReqMW(signupValidationRulesUtil),
-        signupController
+        validateRequestMiddleware(signupValidationRulesUtility),
+        signupSellerController
     );
-    sellerRoutes.post(
+    sellerRouter.post(
         "/login",
-        validateReqMW(loginValidationRulesUtil),
-        loginController
+        validateRequestMiddleware(loginValidationRulesUtility),
+        loginSellerController
     );
-    sellerRoutes.get(
+    sellerRouter.get(
         "/profile/info",
         authenticationMiddleware,
         getSellerDetailsController
     );
-    sellerRoutes.put(
+    sellerRouter.put(
         "/profile/update",
-        validateReqMW(updateProfileValidationRulesUtil),
+        validateRequestMiddleware(updateProfileValidationRulesUtility),
         authenticationMiddleware,
-        sellerProfileUpdateController
+        updateSellerProfileController
     );
-    sellerRoutes.patch(
+    sellerRouter.patch(
         "/updatepassword",
-        validateReqMW(updatePasswordValidationRulesUtil),
+        validateRequestMiddleware(updatePasswordValidationRulesUtility),
         authenticationMiddleware,
-        sellerUpdatePassword
+        updateSellerPasswordController
     );
-    router.use("/seller", sellerRoutes);
+    router.use("/seller", sellerRouter);
 }

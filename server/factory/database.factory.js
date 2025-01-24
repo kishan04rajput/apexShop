@@ -1,70 +1,79 @@
 import { getCacheClient } from "../cache/config.cache.js";
-import { connectMongoDB } from "../database/config.database.js";
+import { connectToMongoDatabase } from "../database/config.database.js";
 import logger from "../utilities/logger.util.js";
 
-var instanceObj = {};
-export const setupDatabaseFactory = async (config) => {
-    if (Object.keys(instanceObj).length == 0) {
+var databaseInstanceObject = {};
+export const setupDatabaseFactory = async (configuration) => {
+    if (Object.keys(databaseInstanceObject).length == 0) {
         // await getCacheClient();
-        await getUserMongoInstance(config);
-        await getSellerMongoInstance(config);
-        await getAdminMongoInstance(config);
-        await getCrMongoInstance(config);
+        await getUserMongoDatabaseInstance(configuration);
+        await getSellerMongoDatabaseInstance(configuration);
+        await getAdminMongoDatabaseInstance(configuration);
+        await getCustomerRelationshipMongoDatabaseInstance(configuration);
     }
     return true;
 };
 
-export const getUserMongoInstance = async (config) => {
-    if (!!instanceObj?.userDB) {
-        return instanceObj.userDB;
+export const getUserMongoDatabaseInstance = async (configuration) => {
+    if (!!databaseInstanceObject?.userDatabase) {
+        return databaseInstanceObject.userDatabase;
     }
-    let userDB = await connectMongoDB(config.mongoUserUri);
-    if (!!userDB) {
-        logger.info("user db connected successfully");
-        instanceObj.userDB = userDB;
-        return userDB;
+    let userDatabase = await connectToMongoDatabase(configuration.mongoUserUri);
+    if (!!userDatabase) {
+        logger.info("User database connected successfully");
+        databaseInstanceObject.userDatabase = userDatabase;
+        return userDatabase;
     }
-    throw "User DB Connect error";
+    throw "User database connection error";
 };
 
-export const getSellerMongoInstance = async (config) => {
-    if (!!instanceObj?.sellerDB) {
-        return instanceObj.sellerDB;
+export const getSellerMongoDatabaseInstance = async (configuration) => {
+    if (!!databaseInstanceObject?.sellerDatabase) {
+        return databaseInstanceObject.sellerDatabase;
     }
-    let sellerDB = await connectMongoDB(config.mongoSellerUri);
-    if (!!sellerDB) {
-        logger.info("seller db connected successfully");
-        instanceObj.sellerDB = sellerDB;
-        return sellerDB;
+    let sellerDatabase = await connectToMongoDatabase(
+        configuration.mongoSellerUri
+    );
+    if (!!sellerDatabase) {
+        logger.info("Seller database connected successfully");
+        databaseInstanceObject.sellerDatabase = sellerDatabase;
+        return sellerDatabase;
     }
 
-    throw "seller db connect error";
+    throw "Seller database connection error";
 };
 
-export const getAdminMongoInstance = async (config) => {
-    if (!!instanceObj?.adminDB) {
-        return instanceObj.adminDB;
+export const getAdminMongoDatabaseInstance = async (configuration) => {
+    if (!!databaseInstanceObject?.adminDatabase) {
+        return databaseInstanceObject.adminDatabase;
     }
-    let adminDB = await connectMongoDB(config.mongoAdminUri);
-    if (!!adminDB) {
-        logger.info("admin db connected successfully");
-        instanceObj.adminDB = adminDB;
-        return adminDB;
+    let adminDatabase = await connectToMongoDatabase(
+        configuration.mongoAdminUri
+    );
+    if (!!adminDatabase) {
+        logger.info("Admin database connected successfully");
+        databaseInstanceObject.adminDatabase = adminDatabase;
+        return adminDatabase;
     }
 
-    throw "admin db connect error";
+    throw "Admin database connection error";
 };
 
-export const getCrMongoInstance = async (config) => {
-    if (!!instanceObj?.CrDB) {
-        return instanceObj.CrDB;
+export const getCustomerRelationshipMongoDatabaseInstance = async (
+    configuration
+) => {
+    if (!!databaseInstanceObject?.customerRelationshipDatabase) {
+        return databaseInstanceObject.customerRelationshipDatabase;
     }
-    let crDB = await connectMongoDB(config.mongoCrUri);
-    if (!!crDB) {
-        logger.info("cr db connected successfully");
-        instanceObj.crDB = crDB;
-        return crDB;
+    let customerRelationshipDatabase = await connectToMongoDatabase(
+        configuration.mongoCustomerRelationshipUri
+    );
+    if (!!customerRelationshipDatabase) {
+        logger.info("Customer relationship database connected successfully");
+        databaseInstanceObject.customerRelationshipDatabase =
+            customerRelationshipDatabase;
+        return customerRelationshipDatabase;
     }
 
-    throw "cr db connect error";
+    throw "Customer relationship database connection error";
 };

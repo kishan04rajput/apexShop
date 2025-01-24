@@ -1,21 +1,21 @@
-import { getConfig } from "../../config/config.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 import { getSellerCacheInstance } from "../../factory/cache.factory.js";
 
-const config = getConfig();
+const config = getConfiguration();
 
-const prefixSellerInfo = "seller:info:";
+const prefixSellerInformation = "seller:info:";
 
 export const setSellerInCache = async (seller) => {
     if (!seller?.email) {
         throw "Invalid seller";
     }
-    let client = await getSellerCacheInstance(config);
+    let cacheClient = await getSellerCacheInstance(config);
 
     let stringifiedSeller = JSON.stringify(seller);
 
-    let key = getSellerCacheKey(seller.email);
-    await client.set(key, stringifiedSeller);
-    await client.expire(key, config.sellerCacheTtl);
+    let cacheKey = generateSellerCacheKey(seller.email);
+    await cacheClient.set(cacheKey, stringifiedSeller);
+    await cacheClient.expire(cacheKey, config.sellerCacheTtl);
 };
 
 export const getSellerFromCache = async (email) => {
@@ -23,9 +23,11 @@ export const getSellerFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getSellerCacheInstance(config);
+    let cacheClient = await getSellerCacheInstance(config);
 
-    let stringifiedSeller = await client.get(getSellerCacheKey(email));
+    let stringifiedSeller = await cacheClient.get(
+        generateSellerCacheKey(email)
+    );
     if (!stringifiedSeller) {
         return null;
     }
@@ -33,12 +35,12 @@ export const getSellerFromCache = async (email) => {
     return seller;
 };
 
-export const setAccessTokenInCacheSeller = async (key, accessToken) => {
-    let client = await getSellerCacheInstance(config);
-    await client.set(key, accessToken);
-    await client.expire(key, config.userCacheTtl);
+export const setAccessTokenInCacheSeller = async (cacheKey, accessToken) => {
+    let cacheClient = await getSellerCacheInstance(config);
+    await cacheClient.set(cacheKey, accessToken);
+    await cacheClient.expire(cacheKey, config.userCacheTtl);
 };
 
-const getSellerCacheKey = (email) => {
-    return prefixSellerInfo + email;
+const generateSellerCacheKey = (email) => {
+    return prefixSellerInformation + email;
 };

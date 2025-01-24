@@ -1,11 +1,12 @@
-import { getSellerMongoInstance } from "../factory/database.factory.js";
+import { getSellerMongoDatabaseInstance } from "../factory/database.factory.js";
 
-var SellerModel = undefined;
+var SellerModelInstance = undefined;
 export const getSellerModel = async () => {
-    if (SellerModel === undefined) {
-        const sellerMongoInstance = await getSellerMongoInstance();
+    if (SellerModelInstance === undefined) {
+        const sellerMongoDatabaseInstance =
+            await getSellerMongoDatabaseInstance();
 
-        const sellerSchema = new sellerMongoInstance.Schema({
+        const sellerSchema = new sellerMongoDatabaseInstance.Schema({
             email: { type: String, required: true, unique: true },
             phone: { type: Number },
             name: { type: String },
@@ -36,9 +37,12 @@ export const getSellerModel = async () => {
             },
         });
 
-        const sellerModel = sellerMongoInstance.model("Seller", sellerSchema);
-        SellerModel = sellerModel;
+        const sellerModelInstance = sellerMongoDatabaseInstance.model(
+            "Seller",
+            sellerSchema
+        );
+        SellerModelInstance = sellerModelInstance;
     }
 
-    return SellerModel;
+    return SellerModelInstance;
 };

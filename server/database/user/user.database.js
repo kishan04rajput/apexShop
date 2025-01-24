@@ -1,24 +1,24 @@
 import { getUserModel } from "../../models/user.model.js";
 
-export const findUserUsingEmailDB = async (email) => {
+export const findUserByEmailInDatabase = async (email) => {
     const userModel = await getUserModel();
     return await userModel.findOne({ email });
 };
 
-export const createNewUserDB = async (newUser) => {
+export const createNewUserInDatabase = async (newUser) => {
     return await newUser.save();
 };
 
-export const saveUserRefreshTokenDB = async (user) => {
+export const saveUserRefreshTokenInDatabase = async (user) => {
     return await user.save({ validateBeforeSave: false });
 };
 
-export const userProfielUpdateDB = async (user) => {
+export const updateUserProfileInDatabase = async (user) => {
     return await user.save();
 };
 
-export const convertToUserDBObj = async (plainUserObj) => {
+export const convertToUserDatabaseObject = async (plainUserObject) => {
     const userModel = await getUserModel();
-    let User = await userModel.hydrate(plainUserObj);
-    return User;
+    let userInstance = await userModel.hydrate(plainUserObject);
+    return userInstance;
 };

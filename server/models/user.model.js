@@ -1,11 +1,11 @@
-import { getUserMongoInstance } from "../factory/database.factory.js";
+import { getUserMongoDatabaseInstance } from "../factory/database.factory.js";
 
-var UserModel = undefined;
+var UserModelInstance = undefined;
 export const getUserModel = async () => {
-    if (UserModel === undefined) {
-        const userMongoInstance = await getUserMongoInstance();
+    if (UserModelInstance === undefined) {
+        const userMongoDatabaseInstance = await getUserMongoDatabaseInstance();
 
-        const userSchema = new userMongoInstance.Schema({
+        const userSchema = new userMongoDatabaseInstance.Schema({
             email: { type: String, required: true, unique: true },
             phone: { type: Number },
             name: { type: String },
@@ -36,9 +36,12 @@ export const getUserModel = async () => {
             },
         });
 
-        const userModel = userMongoInstance.model("User", userSchema);
-        UserModel = userModel;
+        const userModelInstance = userMongoDatabaseInstance.model(
+            "User",
+            userSchema
+        );
+        UserModelInstance = userModelInstance;
     }
 
-    return UserModel;
+    return UserModelInstance;
 };

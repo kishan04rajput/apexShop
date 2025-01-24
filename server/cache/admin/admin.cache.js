@@ -1,37 +1,39 @@
-import { getConfig } from "../../config/config.js";
+import { getConfig } from "../../configuration/configuration.js";
 import { getAdminCacheInstance } from "../../factory/cache.factory.js";
 const config = getConfig();
 
-const prefixAdminInfo = "admin:info:";
+const prefixAdminInformation = "admin:info:";
 
-export const setAdminInCache = async (admin) => {
-    if (!admin?.email) {
-        throw "Invalid admin";
+export const setAdministratorInCache = async (administrator) => {
+    if (!administrator?.email) {
+        throw "Invalid administrator";
     }
-    let client = await getAdminCacheInstance(config);
+    let cacheClient = await getAdminCacheInstance(config);
 
-    let stringifiedAdmin = JSON.stringify(admin);
+    let stringifiedAdministrator = JSON.stringify(administrator);
 
-    let key = getAdminCacheKey(admin.email);
-    await client.set(key, stringifiedAdmin);
-    await client.expire(key, config.adminCacheTtl);
+    let cacheKey = generateAdminCacheKey(administrator.email);
+    await cacheClient.set(cacheKey, stringifiedAdministrator);
+    await cacheClient.expire(cacheKey, config.adminCacheTtl);
 };
 
-export const getAdminFromCache = async (email) => {
+export const getAdministratorFromCache = async (email) => {
     if (!email || email === "") {
         throw "Invalid email";
     }
 
-    let client = await getAdminCacheInstance(config);
+    let cacheClient = await getAdminCacheInstance(config);
 
-    let stringifiedAdmin = await client.get(getAdminCacheKey(email));
-    if (!stringifiedAdmin) {
+    let stringifiedAdministrator = await cacheClient.get(
+        generateAdminCacheKey(email)
+    );
+    if (!stringifiedAdministrator) {
         return null;
     }
-    let admin = JSON.parse(stringifiedAdmin);
-    return admin;
+    let administrator = JSON.parse(stringifiedAdministrator);
+    return administrator;
 };
 
-const getAdminCacheKey = (email) => {
-    return prefixAdminInfo + email;
+const generateAdminCacheKey = (email) => {
+    return prefixAdminInformation + email;
 };

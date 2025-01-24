@@ -1,21 +1,21 @@
-import { getConfig } from "../../config/config.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 import { getUserCacheInstance } from "../../factory/cache.factory.js";
 
-const config = getConfig();
+const config = getConfiguration();
 
-const prefixUserInfo = "user:info:";
+const prefixUserInformation = "user:info:";
 
 export const setUserInCache = async (user) => {
     if (!user?.email) {
         throw "Invalid user";
     }
-    let client = await getUserCacheInstance(config);
+    let cacheClient = await getUserCacheInstance(config);
 
     let stringifiedUser = JSON.stringify(user);
 
-    let key = getUserCacheKey(user.email);
-    await client.set(key, stringifiedUser);
-    await client.expire(key, config.userCacheTtl);
+    let cacheKey = generateUserCacheKey(user.email);
+    await cacheClient.set(cacheKey, stringifiedUser);
+    await cacheClient.expire(cacheKey, config.userCacheTtl);
 };
 
 export const getUserFromCache = async (email) => {
@@ -23,9 +23,9 @@ export const getUserFromCache = async (email) => {
         throw "Invalid email";
     }
 
-    let client = await getUserCacheInstance(config);
+    let cacheClient = await getUserCacheInstance(config);
 
-    let stringifiedUser = await client.get(getUserCacheKey(email));
+    let stringifiedUser = await cacheClient.get(generateUserCacheKey(email));
     if (!stringifiedUser) {
         return null;
     }
@@ -33,12 +33,12 @@ export const getUserFromCache = async (email) => {
     return user;
 };
 
-export const setAccessTokenInCacheUser = async (key, accessToken) => {
-    let client = await getUserCacheInstance(config);
-    await client.set(key, accessToken);
-    await client.expire(key, config.userCacheTtl);
+export const setAccessTokenInCacheUser = async (cacheKey, accessToken) => {
+    let cacheClient = await getUserCacheInstance(config);
+    await cacheClient.set(cacheKey, accessToken);
+    await cacheClient.expire(cacheKey, config.userCacheTtl);
 };
 
-const getUserCacheKey = (email) => {
-    return prefixUserInfo + email;
+const generateUserCacheKey = (email) => {
+    return prefixUserInformation + email;
 };

@@ -1,49 +1,49 @@
 import {
     getUserDetailsController,
-    loginController,
-    signupController,
-    userProfileUpdateController,
-    userUpdatePassword,
+    loginUserController,
+    signupUserController,
+    updateUserProfileController,
+    updateUserPasswordController,
 } from "../../controllers/user/user.controller.js";
 import { authenticationMiddleware } from "../../middlewares/authentication.middleware.js";
 import express from "express";
-import { validateReqMW } from "../../middlewares/validateRequest.middleware.js";
+import { validateRequestMiddleware } from "../../middlewares/validateRequest.middleware.js";
 import {
-    loginValidationRulesUtil,
-    signupValidationRulesUtil,
-    updatePasswordValidationRulesUtil,
-    updateProfileValidationRulesUtil,
+    loginValidationRulesUtility,
+    signupValidationRulesUtility,
+    updatePasswordValidationRulesUtility,
+    updateProfileValidationRulesUtility,
 } from "../../utilities/validationRules.util.js";
 
 export function userRoutes(router) {
-    const userRoutes = express.Router();
+    const userRouter = express.Router();
 
-    userRoutes.post(
+    userRouter.post(
         "/signup",
-        validateReqMW(signupValidationRulesUtil),
-        signupController
+        validateRequestMiddleware(signupValidationRulesUtility),
+        signupUserController
     );
-    userRoutes.post(
+    userRouter.post(
         "/login",
-        validateReqMW(loginValidationRulesUtil),
-        loginController
+        validateRequestMiddleware(loginValidationRulesUtility),
+        loginUserController
     );
-    userRoutes.get(
+    userRouter.get(
         "/profile/info",
         authenticationMiddleware,
         getUserDetailsController
     );
-    userRoutes.put(
+    userRouter.put(
         "/profile/update",
-        validateReqMW(updateProfileValidationRulesUtil),
+        validateRequestMiddleware(updateProfileValidationRulesUtility),
         authenticationMiddleware,
-        userProfileUpdateController
+        updateUserProfileController
     );
-    userRoutes.patch(
+    userRouter.patch(
         "/updatepassword",
-        validateReqMW(updatePasswordValidationRulesUtil),
+        validateRequestMiddleware(updatePasswordValidationRulesUtility),
         authenticationMiddleware,
-        userUpdatePassword
+        updateUserPasswordController
     );
-    router.use("/user", userRoutes);
+    router.use("/user", userRouter);
 }

@@ -1,24 +1,24 @@
 import { getSellerModel } from "../../models/seller.model.js";
 
-export const findSellerUsingEmailDB = async (email) => {
+export const findSellerByEmailInDatabase = async (email) => {
     const sellerModel = await getSellerModel();
     return await sellerModel.findOne({ email });
 };
 
-export const createNewSellerDB = async (newSeller) => {
+export const createNewSellerInDatabase = async (newSeller) => {
     return await newSeller.save();
 };
 
-export const saveSellerRefreshTokenDB = async (seller) => {
+export const saveSellerRefreshTokenInDatabase = async (seller) => {
     return await seller.save({ validateBeforeSave: false });
 };
 
-export const sellerProfileUpdateDB = async (seller) => {
+export const updateSellerProfileInDatabase = async (seller) => {
     return await seller.save();
 };
 
-export const convertToSellerDBObj = async (plainSellerObj) => {
+export const convertToSellerDatabaseObject = async (plainSellerObject) => {
     const sellerModel = await getSellerModel();
-    let Seller = await sellerModel.hydrate(plainSellerObj);
-    return Seller;
+    let sellerInstance = await sellerModel.hydrate(plainSellerObject);
+    return sellerInstance;
 };

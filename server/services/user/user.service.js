@@ -2,11 +2,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import {
-    convertToUserDBObj,
-    createNewUserDB,
-    findUserUsingEmailDB,
-    saveUserRefreshTokenDB,
-    userProfielUpdateDB,
+    convertToUserDatabaseObject,
+    createNewUserInDatabase,
+    findUserByEmailInDatabase,
+    saveUserRefreshTokenInDatabase,
+    updateUserProfileInDatabase,
 } from "../../database/user/user.database.js";
 import { getUserModel } from "../../models/user.model.js";
 import {
@@ -14,21 +14,21 @@ import {
     setUserInCache,
 } from "../../cache/user/user.cache.js";
 
-export const checkIfUserExistSvc = async (email) => {
+export const checkIfUserExistsService = async (email) => {
     let user = await getUserFromCache(email);
     if (!user) {
-        user = await findUserUsingEmailDB(email);
+        user = await findUserByEmailInDatabase(email);
         if (!user) {
             return null;
         }
 
         await setUserInCache(user);
     }
-    user = convertToUserDBObj(user);
+    user = convertToUserDatabaseObject(user);
     return user;
 };
 
-export const createNewUserSvc = async (email, password, salt) => {
+export const createNewUserService = async (email, password, salt) => {
     const userModel = await getUserModel();
     const newUser = new userModel({
         email,
@@ -36,30 +36,33 @@ export const createNewUserSvc = async (email, password, salt) => {
         salt,
     });
 
-    return await createNewUserDB(newUser);
+    return await createNewUserInDatabase(newUser);
 };
 
-export const compareUserPasswordSvc = async (userPassword, dbPassword) => {
-    return bcrypt.compareSync(userPassword, dbPassword);
+export const compareUserPasswordService = async (
+    userPassword,
+    databasePassword
+) => {
+    return bcrypt.compareSync(userPassword, databasePassword);
 };
 
-export const saveUserRefreshTokenSvc = async (user, refreshToken) => {
+export const saveUserRefreshTokenService = async (user, refreshToken) => {
     user.refreshToken = refreshToken;
-    return await saveUserRefreshTokenDB(user);
+    return await saveUserRefreshTokenInDatabase(user);
 };
 
-export const decodeUserJwtTokenSvc = async (jwtToken, key) => {
-    // TODO: change name to suitable name which can justify it's function
+export const decodeUserJwtTokenService = async (jwtToken, secretKey) => {
+    // TODO: change name to suitable name which can justify its function
     try {
-        return jwt.verify(jwtToken, key);
-    } catch (e) {
-        console.log(e);
+        return jwt.verify(jwtToken, secretKey);
+    } catch (error) {
+        console.log(error);
         return null;
     }
 };
 
-export const userProfileUpdateSvc = async (email, updatedData) => {
-    let user = await checkIfUserExistSvc(email);
+export const updateUserProfileService = async (email, updatedData) => {
+    let user = await checkIfUserExistsService(email);
     if (!user) {
         return { error: "User Not Found!" };
     }
@@ -85,5 +88,5 @@ export const userProfileUpdateSvc = async (email, updatedData) => {
     updatedData.Country ? (user.Country = updatedData.Country) : null;
     updatedData.state ? (user.state = updatedData.state) : null;
     updatedData.city ? (user.city = updatedData.city) : null;
-    return await userProfielUpdateDB(user);
+    return await updateUserProfileInDatabase(user);
 };

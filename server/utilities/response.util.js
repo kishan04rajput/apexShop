@@ -1,32 +1,32 @@
-export const handleErrorResUtil = (
-    res,
+export const handleErrorResponseUtility = (
+    response,
     httpCode = 400,
     status,
-    errMsg = null
+    errorMessage = null
 ) => {
-    let response;
-    if (errMsg) {
-        response = { status, error: errMsg };
+    let jsonResponse;
+    if (errorMessage) {
+        jsonResponse = { status, error: errorMessage };
     } else {
-        response = { status };
+        jsonResponse = { status };
     }
 
-    return res.status(httpCode).json(response);
+    return response.status(httpCode).json(jsonResponse);
 };
 
-export const handleSuccessResUtil = (
-    res,
+export const handleSuccessResponseUtility = (
+    response,
     httpCode = 400,
     status,
-    msg,
+    message,
     data = null
 ) => {
-    let response;
+    let jsonResponse;
     if (data) {
-        response = { status, msg, data };
+        jsonResponse = { status, message, data };
     } else {
-        response = { status, msg };
+        jsonResponse = { status, message };
     }
 
-    return res.status(httpCode).json(response);
+    return response.status(httpCode).json(jsonResponse);
 };

@@ -1,31 +1,53 @@
 import { getUserFromCache, setUserInCache } from "../cache/user/user.cache.js";
-import { getConfig } from "../config/config.js";
+import { getConfiguration } from "../configuration/configuration.js";
 import {
-    checkIfUserExistSvc,
-    decodeUserJwtTokenSvc,
+    checkIfUserExistsService,
+    decodeUserJwtTokenService,
 } from "../services/user/user.service.js";
-import { handleErrorResUtil } from "../utilities/response.util.js";
-const config = getConfig();
+import { handleErrorResponseUtility } from "../utilities/response.util.js";
+const configuration = getConfiguration();
 
-export const authenticationMiddleware = async (req, res, next) => {
-    const token = req?.headers?.apexshopaccesstoken || null;
+export const authenticationMiddleware = async (
+    request,
+    response,
+    nextFunction
+) => {
+    const token = request?.headers?.apexshopaccesstoken || null;
     if (!token) {
-        return handleErrorResUtil(res, 404, "failed", "Please Login!");
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            "Please Login!"
+        );
     }
 
-    let response = await decodeUserJwtTokenSvc(token, config.accessTokenSecret);
-    if (!response) {
-        return handleErrorResUtil(res, 404, "failed", "Please login again!");
+    let decodedToken = await decodeUserJwtTokenService(
+        token,
+        configuration.accessTokenSecret
+    );
+    if (!decodedToken) {
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            "Please login again!"
+        );
     }
 
-    let { sub } = response;
+    let { sub } = decodedToken;
 
-    let user = await checkIfUserExistSvc(sub);
+    let user = await checkIfUserExistsService(sub);
     if (!user) {
-        return handleErrorResUtil(res, 404, "failed", "User Not Found!");
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            "User Not Found!"
+        );
     }
 
-    req.user = user;
-    req.user.email = sub;
-    next();
+    request.user = user;
+    request.user.email = sub;
+    nextFunction();
 };

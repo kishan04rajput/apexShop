@@ -1,11 +1,11 @@
 import { getAdminMongoInstance } from "../factory/database.factory.js";
 
-var AdminModel = undefined;
+var AdminModelInstance = undefined;
 export const getAdminModel = async () => {
-    if (AdminModel === undefined) {
-        const adminMongoInstance = await getAdminMongoInstance();
+    if (AdminModelInstance === undefined) {
+        const adminMongoDatabaseInstance = await getAdminMongoInstance();
 
-        const adminSchema = new adminMongoInstance.Schema({
+        const adminSchema = new adminMongoDatabaseInstance.Schema({
             email: { type: String, required: true, unique: true },
             phone: { type: Number },
             name: { type: String },
@@ -36,9 +36,12 @@ export const getAdminModel = async () => {
             },
         });
 
-        const adminModel = adminMongoInstance.model("Admin", adminSchema);
-        AdminModel = adminModel;
+        const adminModelInstance = adminMongoDatabaseInstance.model(
+            "Admin",
+            adminSchema
+        );
+        AdminModelInstance = adminModelInstance;
     }
 
-    return AdminModel;
+    return AdminModelInstance;
 };

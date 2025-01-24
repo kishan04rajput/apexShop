@@ -1,6 +1,6 @@
-export const decodeFromBase64 = (base64EncodedStr) => {
-    const decodedStr = Buffer.from(base64EncodedStr, "base64").toString(
+export const decodeFromBase64Utility = (base64EncodedString) => {
+    const decodedString = Buffer.from(base64EncodedString, "base64").toString(
         "utf-8"
     );
-    return decodedStr;
+    return decodedString;
 };

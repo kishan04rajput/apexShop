@@ -1,40 +1,40 @@
 import jwt from "jsonwebtoken";
-import { getConfig } from "../config/config.js";
+import { getConfiguration } from "../configuration/configuration.js";
 import { nanoid } from "nanoid";
-const config = getConfig();
-// console.log("jwt.util.js", config);
-export const generateAccessToken = (id, email, type) => {
-    let jti = nanoid();
+const configuration = getConfiguration();
+// console.log("jwt.util.js", configuration);
+export const generateAccessTokenUtility = (id, email, type) => {
+    let jwtId = nanoid();
     return [
         jwt.sign(
             {
                 iss: "ApexShop",
                 sub: email,
                 aud: [type],
-                nbf: Date.now(),
+                nbf: Math.floor(Date.now() / 1000),
                 iat: Date.now(),
-                jti,
+                jti: jwtId,
             },
-            config.accessTokenSecret,
-            { expiresIn: config.accessTokenExpiry }
+            configuration.accessTokenSecret,
+            { expiresIn: configuration.accessTokenExpiry }
         ),
-        jti,
+        jwtId,
     ];
 };
 
-export const generateRefreshToken = (id, email, type) => {
+export const generateRefreshTokenUtility = (id, email, type) => {
     return jwt.sign(
         {
             iss: "ApexShop",
             sub: email,
             aud: [type],
-            nbf: Date.now(),
+            nbf: Math.floor(Date.now() / 1000),
             iat: Date.now(),
             jti: nanoid(),
         },
-        config.refreshTokenSecret,
+        configuration.refreshTokenSecret,
         {
-            expiresIn: config.refreshTokenExpiry,
+            expiresIn: configuration.refreshTokenExpiry,
         }
     );
 };

@@ -1,8 +1,8 @@
 import { createLogger, transports, format } from "winston";
 import util from "util";
-import { getConfig } from "../config/config.js";
+import { getConfiguration } from "../configuration/configuration.js";
 import { header } from "express-validator";
-const config = getConfig();
+const configuration = getConfiguration();
 
 const customFormat = format.printf(
     ({ level, message, timestamp, service, ...other }) => {
@@ -19,7 +19,7 @@ const customFormat = format.printf(
 );
 
 const logger = createLogger({
-    level: config.loggerLevel, // Set the minimum level of logs to capture
+    level: configuration.loggerLevel, // Set the minimum level of logs to capture
     format: format.combine(
         format.timestamp({
             format: "YYYY-MM-DD HH:mm:ss",
@@ -33,28 +33,28 @@ const logger = createLogger({
     transports: [new transports.Console()],
 });
 
-const deepClone = (obj) => {
-    return JSON.parse(JSON.stringify(obj));
+const deepClone = (object) => {
+    return JSON.parse(JSON.stringify(object));
 };
 
-export const logRequestResponseUtil = (req, res, next) => {
+export const logRequestResponseUtility = (request, response, nextFunction) => {
     // Create a temporary container to hold the response body
     let responseBody = "";
     // Capture the original send function
-    const originalSend = res.json; // Override the send function to capture and log response body
-    res.json = function (body) {
+    const originalSend = response.json; // Override the send function to capture and log response body
+    response.json = function (body) {
         responseBody = body;
         // Log the request and response when the response is finished
-        res.on("finish", () => {
-            const responseHeaders = deepClone(res.getHeaders());
+        response.on("finish", () => {
+            const responseHeaders = deepClone(response.getHeaders());
             logger.info({
-                endpoint: req.url,
-                method: req.method,
-                userId: req.user ? req.user.id : "Unknown",
+                endpoint: request.url,
+                method: request.method,
+                userId: request.user ? request.user.id : "Unknown",
                 request: {
-                    body: req.body,
-                    params: req.params,
-                    headers: req.headers,
+                    body: request.body,
+                    params: request.params,
+                    headers: request.headers,
                 },
                 response: {
                     body: responseBody,
@@ -65,7 +65,7 @@ export const logRequestResponseUtil = (req, res, next) => {
         });
         return originalSend.apply(this, arguments);
     };
-    next();
+    nextFunction();
 };
 
 export default logger;
