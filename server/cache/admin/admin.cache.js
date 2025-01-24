@@ -1,10 +1,10 @@
-import { getConfig } from "../../configuration/configuration.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 import { getAdminCacheInstance } from "../../factory/cache.factory.js";
-const config = getConfig();
 
 const prefixAdminInformation = "admin:info:";
 
 export const setAdministratorInCache = async (administrator) => {
+    const config = getConfiguration();
     if (!administrator?.email) {
         throw "Invalid administrator";
     }
@@ -18,6 +18,7 @@ export const setAdministratorInCache = async (administrator) => {
 };
 
 export const getAdministratorFromCache = async (email) => {
+    const config = getConfiguration();
     if (!email || email === "") {
         throw "Invalid email";
     }

@@ -5,13 +5,13 @@ import {
     decodeUserJwtTokenService,
 } from "../services/user/user.service.js";
 import { handleErrorResponseUtility } from "../utilities/response.util.js";
-const configuration = getConfiguration();
 
 export const authenticationMiddleware = async (
     request,
     response,
     nextFunction
 ) => {
+    const configuration = getConfiguration();
     const token = request?.headers?.apexshopaccesstoken || null;
     if (!token) {
         return handleErrorResponseUtility(

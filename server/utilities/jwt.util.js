@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { getConfiguration } from "../configuration/configuration.js";
 import { nanoid } from "nanoid";
-const configuration = getConfiguration();
+
 // console.log("jwt.util.js", configuration);
 export const generateAccessTokenUtility = (id, email, type) => {
+    const configuration = getConfiguration();
     let jwtId = nanoid();
     return [
         jwt.sign(
@@ -23,6 +24,7 @@ export const generateAccessTokenUtility = (id, email, type) => {
 };
 
 export const generateRefreshTokenUtility = (id, email, type) => {
+    const configuration = getConfiguration();
     return jwt.sign(
         {
             iss: "ApexShop",

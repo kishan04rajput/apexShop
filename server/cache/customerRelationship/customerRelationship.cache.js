@@ -1,13 +1,10 @@
-import { getConfig } from "../../configuration/configuration.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 import { getCrCacheInstance } from "../../factory/cache.factory.js";
-import { getCacheClient } from "../config.cache.js";
-
-const config = getConfig();
 
 const prefixCustomerRelationshipInformation = "cr:info:";
-const customerRelationshipDatabaseIndex = 2; // Using database 2 for customer relationship
 
 export const setCustomerRelationshipInCache = async (customerRelationship) => {
+    const config = getConfiguration();
     if (!customerRelationship?.email) {
         throw "Invalid customer relationship";
     }
@@ -23,6 +20,7 @@ export const setCustomerRelationshipInCache = async (customerRelationship) => {
 };
 
 export const getCustomerRelationshipFromCache = async (email) => {
+    const config = getConfiguration();
     if (!email || email === "") {
         throw "Invalid email";
     }

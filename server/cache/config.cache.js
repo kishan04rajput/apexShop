@@ -9,6 +9,7 @@ export const getCacheClient = async (connectionUri) => {
         logger.info(`Connected to Redis database ${connectionUri}`);
     } catch (error) {
         logger.error(error);
+        return null;
     }
     return cacheClient;
 };

@@ -1,11 +1,10 @@
 import { getConfiguration } from "../../configuration/configuration.js";
 import { getSellerCacheInstance } from "../../factory/cache.factory.js";
 
-const config = getConfiguration();
-
 const prefixSellerInformation = "seller:info:";
 
 export const setSellerInCache = async (seller) => {
+    const config = getConfiguration();
     if (!seller?.email) {
         throw "Invalid seller";
     }
@@ -19,6 +18,7 @@ export const setSellerInCache = async (seller) => {
 };
 
 export const getSellerFromCache = async (email) => {
+    const config = getConfiguration();
     if (!email || email === "") {
         throw "Invalid email";
     }
@@ -36,6 +36,7 @@ export const getSellerFromCache = async (email) => {
 };
 
 export const setAccessTokenInCacheSeller = async (cacheKey, accessToken) => {
+    const config = getConfiguration();
     let cacheClient = await getSellerCacheInstance(config);
     await cacheClient.set(cacheKey, accessToken);
     await cacheClient.expire(cacheKey, config.userCacheTtl);
