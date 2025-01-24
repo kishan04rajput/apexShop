@@ -26,9 +26,13 @@ export const setupConfig = () => {
     let cacheUriSeller = process.env.CACHE_URI_SELLER;
     let cacheUriAdmin = process.env.CACHE_URI_ADMIN;
     let cacheUriCr = process.env.CACHE_URI_CR;
+    let privateKeyBase64 = process.env.PRIVATE_KEY_BASE_64;
 
     // check mandatory env variables
 
+    !privateKeyBase64
+        ? err.push("PRIVATE_KEY_BASE_64")
+        : (config.privateKeyBase64 = privateKeyBase64);
     !cacheUriSeller
         ? err.push("CACHE_URI_SELLER")
         : (config.cacheUriSeller = cacheUriSeller);
