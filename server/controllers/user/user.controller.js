@@ -84,8 +84,8 @@ export const loginController = async (req, res) => {
     const refreshToken = generateRefreshToken(user._id, user.email, user.type);
 
     await setAccessTokenInCacheUser(
-        `user:jwt:token:Access:${user.email}`,
-        `${accessTokenJti}:${accessToken}`
+        `user:jwt:token:Access:${user.email}:${accessTokenJti}`,
+        `${accessToken}`
     );
 
     const {

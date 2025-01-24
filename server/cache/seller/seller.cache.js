@@ -1,6 +1,5 @@
 import { getConfig } from "../../config/config.js";
 import { getSellerCacheInstance } from "../../factory/cache.factory.js";
-import { getCacheClient } from "../config.cache.js";
 
 const config = getConfig();
 

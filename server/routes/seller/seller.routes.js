@@ -4,7 +4,7 @@ import {
     signupController,
     sellerProfileUpdateController,
     sellerUpdatePassword,
-} from "../../controllers.js/seller/seller.controller.js";
+} from "../../controllers/seller/seller.controller.js";
 import { authenticationMiddleware } from "../../middlewares/authentication.middleware.js";
 import express from "express";
 import { validateReqMW } from "../../middlewares/validateRequest.middleware.js";

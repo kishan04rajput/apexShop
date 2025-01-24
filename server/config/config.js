@@ -30,12 +30,12 @@ export const setupConfig = () => {
     // check mandatory env variables
 
     !cacheUriSeller
-        ? err.push("CACHE_URI_USER")
+        ? err.push("CACHE_URI_SELLER")
         : (config.cacheUriSeller = cacheUriSeller);
     !cacheUriAdmin
-        ? err.push("CACHE_URI_USER")
+        ? err.push("CACHE_URI_ADMIN")
         : (config.cacheUriAdmin = cacheUriAdmin);
-    !cacheUriCr ? err.push("CACHE_URI_USER") : (config.cacheUriCr = cacheUriCr);
+    !cacheUriCr ? err.push("CACHE_URI_CR") : (config.cacheUriCr = cacheUriCr);
     !cacheUriUser
         ? err.push("CACHE_URI_USER")
         : (config.cacheUriUser = cacheUriUser);
