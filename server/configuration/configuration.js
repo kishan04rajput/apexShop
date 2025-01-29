@@ -31,7 +31,51 @@ export const setupConfiguration = () => {
         process.env.CACHE_URI_CUSTOMER_RELATIONSHIP;
     let privateKeyBase64 = process.env.PRIVATE_KEY_BASE_64;
 
+    let userAccessTokenSecretKey = process.env.USER_ACCESS_TOKEN_SECRET_KEY;
+    let userRefreshTokenSecretKey = process.env.USER_REFRESH_TOKEN_SECRET_KEY;
+
+    let sellerAccessTokenSecretKey = process.env.SELLER_ACCESS_TOKEN_SECRET_KEY;
+    let sellerRefreshTokenSecretKey =
+        process.env.SELLER_REFRESH_TOKEN_SECRET_KEY;
+
+    let adminAccessTokenSecretKey = process.env.ADMIN_ACCESS_TOKEN_SECRET_KEY;
+    let adminRefreshTokenSecretKey = process.env.ADMIN_REFRESH_TOKEN_SECRET_KEY;
+
+    let crAccessTokenSecretKey = process.env.CR_ACCESS_TOKEN_SECRET_KEY;
+    let crRefreshTokenSecretKey = process.env.CR_REFRESH_TOKEN_SECRET_KEY;
+
     // check mandatory env variables
+
+    !userAccessTokenSecretKey
+        ? errors.push("USER_ACCESS_TOKEN_SECRET_KEY")
+        : (configuration.userAccessTokenSecretKey = userAccessTokenSecretKey);
+    !userRefreshTokenSecretKey
+        ? errors.push("USER_REFRESH_TOKEN_SECRET_KEY")
+        : (configuration.userRefreshTokenSecretKey = userRefreshTokenSecretKey);
+
+    !sellerAccessTokenSecretKey
+        ? errors.push("SELLER_ACCESS_TOKEN_SECRET_KEY")
+        : (configuration.sellerAccessTokenSecretKey =
+              sellerAccessTokenSecretKey);
+    !sellerRefreshTokenSecretKey
+        ? errors.push("USER_REFRESH_TOKEN_SECRET_KEY")
+        : (configuration.sellerRefreshTokenSecretKey =
+              sellerRefreshTokenSecretKey);
+
+    !adminAccessTokenSecretKey
+        ? errors.push("ADMIN_ACCESS_TOKEN_SECRET_KEY")
+        : (configuration.adminAccessTokenSecretKey = adminAccessTokenSecretKey);
+    !adminRefreshTokenSecretKey
+        ? errors.push("ADMIN_REFRESH_TOKEN_SECRET_KEY")
+        : (configuration.adminRefreshTokenSecretKey =
+              adminRefreshTokenSecretKey);
+
+    !crAccessTokenSecretKey
+        ? errors.push("CR_ACCESS_TOKEN_SECRET_KEY")
+        : (configuration.crAccessTokenSecretKey = crAccessTokenSecretKey);
+    !crRefreshTokenSecretKey
+        ? errors.push("CR_REFRESH_TOKEN_SECRET_KEY")
+        : (configuration.crRefreshTokenSecretKey = crRefreshTokenSecretKey);
 
     !privateKeyBase64
         ? errors.push("PRIVATE_KEY_BASE_64")
