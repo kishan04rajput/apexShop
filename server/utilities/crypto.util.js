@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { getConfiguration } from "../configuration/configuration.js";
-import { decodeFromBase64Utility } from "./decodeFromBase64.util.js";
+import { decodeFromBase64Utility } from "./base64.util.js";
 
 export const decryptPasswordUtility = (encryptedPassword) => {
     const configuration = getConfiguration();

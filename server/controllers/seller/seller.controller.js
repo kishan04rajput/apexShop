@@ -6,8 +6,8 @@ import {
     saveSellerRefreshTokenService,
     updateSellerProfileService,
 } from "../../services/seller/seller.service.js";
-import { createHashedPasswordUtility } from "../../utilities/createHashedPassword.util.js";
-import { decryptPasswordUtility } from "../../utilities/decryptPassword.util.js";
+import { createHashedPasswordUtility } from "../../utilities/hash.util.js";
+import { decryptPasswordUtility } from "../../utilities/crypto.util.js";
 import {
     generateAccessTokenUtility,
     generateRefreshTokenUtility,
@@ -113,6 +113,7 @@ export const loginSellerController = async (request, response) => {
         __v,
         oldPassword,
         salt,
+        is_deleted,
         ...otherDetails
     } = seller._doc;
     request.user = seller._doc;
@@ -219,7 +220,7 @@ export const updateSellerPasswordController = async (request, response) => {
             500,
             "failed",
             "An unexpected error occurred",
-            `error---->${error}`
+            `${error}`
         );
     }
 };

@@ -6,8 +6,8 @@ import {
     saveUserRefreshTokenService,
     updateUserProfileService,
 } from "../../services/user/user.service.js";
-import { createHashedPasswordUtility } from "../../utilities/createHashedPassword.util.js";
-import { decryptPasswordUtility } from "../../utilities/decryptPassword.util.js";
+import { createHashedPasswordUtility } from "../../utilities/hash.util.js";
+import { decryptPasswordUtility } from "../../utilities/crypto.util.js";
 import {
     generateAccessTokenUtility,
     generateRefreshTokenUtility,
@@ -125,6 +125,7 @@ export const loginUserController = async (request, response) => {
         __v,
         oldPassword,
         salt,
+        is_deleted,
         ...otherDetails
     } = user._doc;
     request.user = user._doc;

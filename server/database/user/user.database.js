@@ -15,6 +15,7 @@ export const saveUserRefreshTokenInDatabase = async (user) => {
 
 export const updateUserProfileInDatabase = async (user) => {
     return await user.save();
+    // throw "success";
 };
 
 export const convertToUserDatabaseObject = async (plainUserObject) => {
