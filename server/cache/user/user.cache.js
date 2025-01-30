@@ -18,6 +18,7 @@ export const setUserInCache = async (user) => {
 };
 
 export const getUserFromCache = async (email) => {
+    // console.log("----->getUserFromCache");
     const config = getConfiguration();
     if (!email || email === "") {
         throw "Invalid email";

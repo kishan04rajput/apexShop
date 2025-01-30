@@ -2,6 +2,7 @@ import { getUserMongoDatabaseInstance } from "../factory/database.factory.js";
 
 var UserModelInstance = undefined;
 export const getUserModel = async () => {
+    // console.log("----->getUserModel");
     if (UserModelInstance === undefined) {
         const userMongoDatabaseInstance = await getUserMongoDatabaseInstance();
 

@@ -20,10 +20,11 @@ import {
 import { passwordRulesValidationUtility } from "../../utilities/validationRules.util.js";
 
 export const signupUserController = async (request, response) => {
-    logger.info(request);
+    // logger.info(request);
+    // console.log("----->signupUserController");
     const plainTextPassword = decryptPasswordUtility(request?.body?.password);
-    const passwordFollowsRules =
-        passwordRulesValidationUtility(plainTextPassword);
+    // const passwordFollowsRules =
+    //     passwordRulesValidationUtility(plainTextPassword);
     // if (passwordFollowsRules.length > 0) {
     //     return handleErrorResponseUtility(
     //         response,
@@ -32,9 +33,27 @@ export const signupUserController = async (request, response) => {
     //         passwordFollowsRules
     //     );
     // }
-    const email = request?.body?.email;
+    const email = request?.body?.email || null;
+
+    if (!email) {
+        return handleErrorResponseUtility(
+            response,
+            404,
+            "failed",
+            "email cannot be empty!"
+        );
+    }
 
     let userExists = await checkIfUserExistsService(email);
+
+    if (userExists !== null && userExists.error) {
+        return handleErrorResponseUtility(
+            response,
+            500,
+            "failed",
+            "Internal server error!"
+        );
+    }
 
     if (userExists) {
         return handleErrorResponseUtility(
@@ -54,7 +73,7 @@ export const signupUserController = async (request, response) => {
     // console.log(createdUser._id);
     request.user = createdUser;
     request.user.id = createdUser._id;
-    if (!createdUser) {
+    if (!createdUser || createdUser.error) {
         return handleErrorResponseUtility(
             response,
             500,
@@ -92,6 +111,15 @@ export const loginUserController = async (request, response) => {
         plainTextPassword,
         user.password
     );
+
+    if (isPasswordCorrect !== null && isPasswordCorrect.error) {
+        return handleErrorResponseUtility(
+            response,
+            400,
+            "failed",
+            "password format incorrect!"
+        );
+    }
 
     if (!isPasswordCorrect) {
         return handleErrorResponseUtility(
@@ -145,7 +173,7 @@ export const loginUserController = async (request, response) => {
 export const getUserDetailsController = async (request, response) => {
     let user = request.user;
 
-    if (!user) {
+    if (!user || !user._doc) {
         return handleErrorResponseUtility(
             response,
             404,
@@ -153,6 +181,7 @@ export const getUserDetailsController = async (request, response) => {
             "User not found!"
         );
     }
+
     const {
         password,
         salt,
@@ -160,6 +189,7 @@ export const getUserDetailsController = async (request, response) => {
         _id,
         __v,
         oldPassword,
+        is_deleted,
         ...otherDetails
     } = user._doc;
 
@@ -210,7 +240,7 @@ export const updateUserPasswordController = async (request, response) => {
             salt,
         };
         let updateResponse = await updateUserProfileService(email, updatedData);
-        if (!updateResponse) {
+        if (!updateResponse || updateResponse.error) {
             return handleErrorResponseUtility(
                 response,
                 500,

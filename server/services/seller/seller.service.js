@@ -18,8 +18,8 @@ export const checkIfSellerExistsService = async (email) => {
     let seller = await getSellerFromCache(email);
     if (!seller) {
         seller = await findSellerByEmailInDatabase(email);
-        if (!seller) {
-            return null;
+        if (seller.error) {
+            return { error: seller.error };
         }
 
         await setSellerInCache(seller);
@@ -43,7 +43,12 @@ export const compareSellerPasswordService = async (
     sellerPassword,
     databasePassword
 ) => {
-    return bcrypt.compareSync(sellerPassword, databasePassword);
+    try {
+        const response = bcrypt.compareSync(sellerPassword, databasePassword);
+        return response;
+    } catch (error) {
+        return { error };
+    }
 };
 
 export const saveSellerRefreshTokenService = async (seller, refreshToken) => {
@@ -98,5 +103,9 @@ export const updateSellerProfileService = async (email, updatedData) => {
     updatedData.Country ? (seller.Country = updatedData.Country) : null;
     updatedData.state ? (seller.state = updatedData.state) : null;
     updatedData.city ? (seller.city = updatedData.city) : null;
-    return await updateSellerProfileInDatabase(seller);
+    const response = await updateSellerProfileInDatabase(seller);
+    if (response.error) {
+        return { error: "Seller Not Found!" };
+    }
+    return response;
 };

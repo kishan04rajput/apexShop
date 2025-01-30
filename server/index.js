@@ -14,10 +14,10 @@ const main = async () => {
     const app = express();
     app.use(express.json());
     app.use(cookieParser());
-    // app.use(morgan("combined"));
-    app.use((request, response, nextFunction) =>
-        logRequestResponseUtility(request, response, nextFunction)
-    );
+    app.use(morgan("combined"));
+    // app.use((request, response, nextFunction) =>
+    //     logRequestResponseUtility(request, response, nextFunction)
+    // );
     app.use(setupRoutes());
 
     app.listen(4444, () => {

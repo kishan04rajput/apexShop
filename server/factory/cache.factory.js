@@ -15,6 +15,7 @@ export const setupCacheFactory = async (configuration) => {
 };
 
 export const getUserCacheInstance = async (configuration) => {
+    // console.log("----->getUserCacheInstance");
     if (!!cacheInstanceObject?.userCache) {
         return cacheInstanceObject.userCache;
     }

@@ -15,11 +15,14 @@ import {
 } from "../../cache/user/user.cache.js";
 
 export const checkIfUserExistsService = async (email) => {
+    // console.log("----->checkIfUserExistsService");
     let user = await getUserFromCache(email);
     if (!user) {
         user = await findUserByEmailInDatabase(email);
         if (!user) {
             return null;
+        } else if (user.error) {
+            return { error: user.error };
         }
 
         await setUserInCache(user);
@@ -29,6 +32,7 @@ export const checkIfUserExistsService = async (email) => {
 };
 
 export const createNewUserService = async (email, password, salt) => {
+    // console.log("----->createNewUserService");
     const userModel = await getUserModel();
     const newUser = new userModel({
         email,
@@ -43,7 +47,12 @@ export const compareUserPasswordService = async (
     userPassword,
     databasePassword
 ) => {
-    return bcrypt.compareSync(userPassword, databasePassword);
+    try {
+        const response = bcrypt.compareSync(userPassword, databasePassword);
+        return response;
+    } catch (error) {
+        return { error };
+    }
 };
 
 export const saveUserRefreshTokenService = async (user, refreshToken) => {
@@ -63,7 +72,7 @@ export const decodeUserJwtTokenService = async (jwtToken, secretKey) => {
 
 export const updateUserProfileService = async (email, updatedData) => {
     let user = await checkIfUserExistsService(email);
-    if (!user) {
+    if (!user || user.error) {
         return { error: "User Not Found!" };
     }
 
@@ -88,5 +97,9 @@ export const updateUserProfileService = async (email, updatedData) => {
     updatedData.Country ? (user.Country = updatedData.Country) : null;
     updatedData.state ? (user.state = updatedData.state) : null;
     updatedData.city ? (user.city = updatedData.city) : null;
-    return await updateUserProfileInDatabase(user);
+    const response = await updateUserProfileInDatabase(user);
+    if (response.error) {
+        return { error: "User Not Found!" };
+    }
+    return response;
 };

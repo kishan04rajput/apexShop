@@ -1,6 +1,7 @@
 const configuration = {};
 
 export const setupConfiguration = () => {
+    // console.log("----->setupConfiguration");
     let errors = [];
 
     // getting values from .env
@@ -137,6 +138,7 @@ export const setupConfiguration = () => {
 };
 
 export const getConfiguration = () => {
+    // console.log("----->getConfiguration");
     if (Object.keys(configuration).length == 0) {
         setupConfiguration();
     }

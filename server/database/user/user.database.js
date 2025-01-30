@@ -1,25 +1,51 @@
 import { getUserModel } from "../../models/user.model.js";
 
 export const findUserByEmailInDatabase = async (email) => {
-    const userModel = await getUserModel();
-    return await userModel.findOne({ email });
+    // console.log("----->findUserByEmailInDatabase");
+    try {
+        const userModel = await getUserModel();
+        const response = await userModel.findOne({ email });
+        return response;
+    } catch (error) {
+        return { error };
+    }
 };
 
 export const createNewUserInDatabase = async (newUser) => {
-    return await newUser.save();
+    // console.log("----->createNewUserInDatabase");
+    try {
+        const response = await newUser.save();
+        return response;
+    } catch (error) {
+        console.log("----->error at createNewUserInDatabase");
+        return { error };
+    }
 };
 
 export const saveUserRefreshTokenInDatabase = async (user) => {
-    return await user.save({ validateBeforeSave: false });
+    try {
+        const response = await user.save({ validateBeforeSave: false });
+        return response;
+    } catch (error) {
+        return { error };
+    }
 };
 
 export const updateUserProfileInDatabase = async (user) => {
-    return await user.save();
-    // throw "success";
+    try {
+        const response = await user.save();
+        return response;
+    } catch (error) {
+        return { error };
+    }
 };
 
 export const convertToUserDatabaseObject = async (plainUserObject) => {
-    const userModel = await getUserModel();
-    let userInstance = await userModel.hydrate(plainUserObject);
-    return userInstance;
+    try {
+        const userModel = await getUserModel();
+        let userInstance = await userModel.hydrate(plainUserObject);
+        return userInstance;
+    } catch (error) {
+        return { error };
+    }
 };

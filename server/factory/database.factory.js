@@ -15,6 +15,7 @@ export const setupDatabaseFactory = async (configuration) => {
 };
 
 export const getUserMongoDatabaseInstance = async (configuration) => {
+    // console.log("----->getUserMongoDatabaseInstance");
     if (!!databaseInstanceObject?.userDatabase) {
         return databaseInstanceObject.userDatabase;
     }

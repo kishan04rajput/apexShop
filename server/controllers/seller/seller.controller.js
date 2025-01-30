@@ -25,6 +25,14 @@ export const signupSellerController = async (request, response) => {
 
     let sellerExists = await checkIfSellerExistsService(email);
 
+    if (sellerExists.error) {
+        return handleErrorResponseUtility(
+            response,
+            500,
+            "failed",
+            "internal server error!"
+        );
+    }
     if (sellerExists) {
         return handleErrorResponseUtility(
             response,
@@ -63,7 +71,23 @@ export const signupSellerController = async (request, response) => {
 };
 
 export const loginSellerController = async (request, response) => {
+    if (request?.body?.password.length === 0) {
+        return handleErrorResponseUtility(
+            response,
+            400,
+            "failed",
+            "Password cannot be empty!"
+        );
+    }
     const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    if (plainTextPassword.error) {
+        return handleErrorResponseUtility(
+            response,
+            400,
+            "failed",
+            "Incorrect password format"
+        );
+    }
     const email = request?.body?.email;
 
     const seller = await checkIfSellerExistsService(email);
@@ -80,6 +104,15 @@ export const loginSellerController = async (request, response) => {
         plainTextPassword,
         seller.password
     );
+
+    if (isPasswordCorrect.error) {
+        return handleErrorResponseUtility(
+            response,
+            500,
+            "failed",
+            "Internal server error!"
+        );
+    }
 
     if (!isPasswordCorrect) {
         return handleErrorResponseUtility(
@@ -133,7 +166,7 @@ export const loginSellerController = async (request, response) => {
 export const getSellerDetailsController = async (request, response) => {
     let seller = request.user;
 
-    if (!seller) {
+    if (!seller || !seller._doc) {
         return handleErrorResponseUtility(
             response,
             404,
@@ -148,6 +181,7 @@ export const getSellerDetailsController = async (request, response) => {
         _id,
         __v,
         oldPassword,
+        is_deleted,
         ...otherDetails
     } = seller._doc;
 
@@ -165,6 +199,7 @@ export const updateSellerProfileController = async (request, response) => {
     let updatedData = request.body;
 
     let updateResponse = await updateSellerProfileService(email, updatedData);
+    // console.log("updateResponse----->", updateResponse.error);
     if (updateResponse.error) {
         return handleErrorResponseUtility(
             response,
@@ -204,7 +239,7 @@ export const updateSellerPasswordController = async (request, response) => {
                 response,
                 500,
                 "failed",
-                "An unexpected error occurred"
+                "An unexpected error occurred!"
             );
         }
         return handleSuccessResponseUtility(

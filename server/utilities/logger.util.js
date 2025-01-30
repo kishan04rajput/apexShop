@@ -38,13 +38,10 @@ const deepClone = (object) => {
 };
 
 export const logRequestResponseUtility = (request, response, nextFunction) => {
-    // Create a temporary container to hold the response body
     let responseBody = "";
-    // Capture the original send function
-    const originalSend = response.json; // Override the send function to capture and log response body
+    const originalSend = response.json;
     response.json = function (body) {
         responseBody = body;
-        // Log the request and response when the response is finished
         response.on("finish", () => {
             const responseHeaders = deepClone(response.getHeaders());
             logger.info({

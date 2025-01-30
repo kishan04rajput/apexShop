@@ -2,6 +2,7 @@ import { createClient } from "redis";
 import logger from "../utilities/logger.util.js";
 
 export const getCacheClient = async (connectionUri) => {
+    // console.log("----->getCacheClient");
     let cacheClient = createClient({ url: connectionUri });
     try {
         await cacheClient.connect();
