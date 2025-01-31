@@ -18,6 +18,7 @@ import {
     handleSuccessResponseUtility,
 } from "../../utilities/response.util.js";
 import { passwordRulesValidationUtility } from "../../utilities/validationRules.util.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 
 export const signupUserController = async (request, response) => {
     // logger.info(request);
@@ -93,6 +94,7 @@ export const signupUserController = async (request, response) => {
 export const loginUserController = async (request, response) => {
     // logger.info(request);
     // console.log(request);
+    const configuration = getConfiguration();
 
     const plainTextPassword = decryptPasswordUtility(request?.body?.password);
     const email = request?.body?.email;
@@ -133,7 +135,8 @@ export const loginUserController = async (request, response) => {
     const [accessToken, accessTokenJti] = generateAccessTokenUtility(
         user._id,
         user.email,
-        user.type
+        user.type,
+        configuration.userAccessTokenSecretKey
     );
     const refreshToken = generateRefreshTokenUtility(
         user._id,

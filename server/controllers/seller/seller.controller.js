@@ -17,6 +17,7 @@ import {
     handleErrorResponseUtility,
     handleSuccessResponseUtility,
 } from "../../utilities/response.util.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 
 export const signupSellerController = async (request, response) => {
     // logger.info(req);
@@ -71,6 +72,7 @@ export const signupSellerController = async (request, response) => {
 };
 
 export const loginSellerController = async (request, response) => {
+    const configuration = getConfiguration();
     if (request?.body?.password.length === 0) {
         return handleErrorResponseUtility(
             response,
@@ -126,7 +128,8 @@ export const loginSellerController = async (request, response) => {
     const [accessToken, accessTokenJti] = generateAccessTokenUtility(
         seller._id,
         seller.email,
-        seller.type
+        seller.type,
+        configuration.sellerAccessTokenSecretKey
     );
     const refreshToken = generateRefreshTokenUtility(
         seller._id,

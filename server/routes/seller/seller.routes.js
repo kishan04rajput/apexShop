@@ -14,8 +14,10 @@ import {
     updatePasswordValidationRulesUtility,
     updateProfileValidationRulesUtility,
 } from "../../utilities/validationRules.util.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 
 export function sellerRoutes(router) {
+    const configuration = getConfiguration();
     const sellerRouter = express.Router();
 
     sellerRouter.post(
@@ -30,19 +32,19 @@ export function sellerRoutes(router) {
     );
     sellerRouter.get(
         "/profile/info",
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
         getSellerDetailsController
     );
     sellerRouter.put(
         "/profile/update",
         validateRequestMiddleware(updateProfileValidationRulesUtility),
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
         updateSellerProfileController
     );
     sellerRouter.patch(
         "/updatepassword",
         validateRequestMiddleware(updatePasswordValidationRulesUtility),
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
         updateSellerPasswordController
     );
     router.use("/seller", sellerRouter);

@@ -3,7 +3,12 @@ import { getConfiguration } from "../configuration/configuration.js";
 import { nanoid } from "nanoid";
 
 // console.log("jwt.util.js", configuration);
-export const generateAccessTokenUtility = (id, email, type) => {
+export const generateAccessTokenUtility = (
+    id,
+    email,
+    type,
+    accessTokenSecretKey
+) => {
     const configuration = getConfiguration();
     let jwtId = nanoid();
     return [
@@ -16,7 +21,7 @@ export const generateAccessTokenUtility = (id, email, type) => {
                 iat: Date.now(),
                 jti: jwtId,
             },
-            configuration.accessTokenSecret,
+            accessTokenSecretKey,
             { expiresIn: configuration.accessTokenExpiry }
         ),
         jwtId,

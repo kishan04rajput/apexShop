@@ -14,8 +14,10 @@ import {
     updatePasswordValidationRulesUtility,
     updateProfileValidationRulesUtility,
 } from "../../utilities/validationRules.util.js";
+import { getConfiguration } from "../../configuration/configuration.js";
 
 export function userRoutes(router) {
+    const configuration = getConfiguration();
     const userRouter = express.Router();
 
     userRouter.post(
@@ -30,19 +32,19 @@ export function userRoutes(router) {
     );
     userRouter.get(
         "/profile/info",
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.userAccessTokenSecretKey),
         getUserDetailsController
     );
     userRouter.put(
         "/profile/update",
         validateRequestMiddleware(updateProfileValidationRulesUtility),
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.userAccessTokenSecretKey),
         updateUserProfileController
     );
     userRouter.patch(
         "/updatepassword",
         validateRequestMiddleware(updatePasswordValidationRulesUtility),
-        authenticationMiddleware,
+        authenticationMiddleware(configuration.userAccessTokenSecretKey),
         updateUserPasswordController
     );
     router.use("/user", userRouter);
