@@ -2,6 +2,7 @@ import { getConfiguration } from "../../configuration/configuration.js";
 import { getSellerCacheInstance } from "../../factory/cache.factory.js";
 
 const prefixSellerInformation = "seller:info:";
+const preFixSellerCacheAcessToken = "seller:jwt:token:Access";
 
 export const setSellerInCache = async (seller) => {
     const config = getConfiguration();
@@ -35,8 +36,9 @@ export const getSellerFromCache = async (email) => {
     return seller;
 };
 
-export const setAccessTokenInCacheSeller = async (cacheKey, accessToken) => {
+export const setAccessTokenInCacheSeller = async (email, jti, accessToken) => {
     const config = getConfiguration();
+    const cacheKey = generateSellerAccessTokenCacheKey(email, jti);
     let cacheClient = await getSellerCacheInstance(config);
     await cacheClient.set(cacheKey, accessToken);
     await cacheClient.expire(cacheKey, config.userCacheTtl);
@@ -44,4 +46,8 @@ export const setAccessTokenInCacheSeller = async (cacheKey, accessToken) => {
 
 const generateSellerCacheKey = (email) => {
     return prefixSellerInformation + email;
+};
+
+const generateSellerAccessTokenCacheKey = (email, jti) => {
+    return `${preFixSellerCacheAcessToken}:${email}:${jti}`;
 };

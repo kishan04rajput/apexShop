@@ -139,7 +139,7 @@ export const setupConfiguration = () => {
 
 export const getConfiguration = () => {
     // console.log("----->getConfiguration");
-    if (Object.keys(configuration).length == 0) {
+    if (Object.keys(configuration).length === 0) {
         setupConfiguration();
     }
     return configuration;

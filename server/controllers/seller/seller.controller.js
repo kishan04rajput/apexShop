@@ -135,8 +135,9 @@ export const loginSellerController = async (request, response) => {
     );
 
     await setAccessTokenInCacheSeller(
-        `seller:jwt:token:Access:${seller.email}:${accessTokenJti}`,
-        `${accessToken}`
+        seller.email,
+        accessTokenJti,
+        accessToken
     );
 
     const {

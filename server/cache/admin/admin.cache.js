@@ -6,8 +6,10 @@ const prefixAdminInformation = "admin:info:";
 export const setAdministratorInCache = async (administrator) => {
     const config = getConfiguration();
     if (!administrator?.email) {
-        throw "Invalid administrator";
+        // throw "Invalid administrator";
+        return { error: "Invalid administrator" };
     }
+
     let cacheClient = await getAdminCacheInstance(config);
 
     let stringifiedAdministrator = JSON.stringify(administrator);

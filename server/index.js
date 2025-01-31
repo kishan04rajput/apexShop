@@ -9,8 +9,9 @@ import logger, { logRequestResponseUtility } from "./utilities/logger.util.js";
 
 const main = async () => {
     let configuration = setupConfiguration();
+    logger.info("Configuration setup completed!");
     if (!(await setupFactory(configuration))) return;
-
+    logger.info("Factory setup completed!");
     const app = express();
     app.use(express.json());
     app.use(cookieParser());

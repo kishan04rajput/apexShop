@@ -141,10 +141,7 @@ export const loginUserController = async (request, response) => {
         user.type
     );
 
-    await setAccessTokenInCacheUser(
-        `user:jwt:token:Access:${user.email}:${accessTokenJti}`,
-        `${accessToken}`
-    );
+    await setAccessTokenInCacheUser(user.email, accessTokenJti, accessToken);
 
     const {
         password,
