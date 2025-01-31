@@ -23,17 +23,8 @@ import { getConfiguration } from "../../configuration/configuration.js";
 export const signupUserController = async (request, response) => {
     // logger.info(request);
     // console.log("----->signupUserController");
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
-    // const passwordFollowsRules =
-    //     passwordRulesValidationUtility(plainTextPassword);
-    // if (passwordFollowsRules.length > 0) {
-    //     return handleErrorResponseUtility(
-    //         response,
-    //         404,
-    //         "failed",
-    //         passwordFollowsRules
-    //     );
-    // }
+    const plainTextPassword = request?.body?.password;
+
     const email = request?.body?.email || null;
 
     if (!email) {
@@ -96,7 +87,7 @@ export const loginUserController = async (request, response) => {
     // console.log(request);
     const configuration = getConfiguration();
 
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const plainTextPassword = request?.body?.password;
     const email = request?.body?.email;
 
     const user = await checkIfUserExistsService(email);
@@ -228,7 +219,7 @@ export const updateUserProfileController = async (request, response) => {
 
 export const updateUserPasswordController = async (request, response) => {
     let email = request?.user?.email;
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const plainTextPassword = request?.body?.password;
     console.log("plainTextPassword = ", plainTextPassword);
     try {
         const [hashedPassword, salt] = await createHashedPasswordUtility(

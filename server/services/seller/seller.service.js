@@ -18,7 +18,7 @@ export const checkIfSellerExistsService = async (email) => {
     let seller = await getSellerFromCache(email);
     if (!seller) {
         seller = await findSellerByEmailInDatabase(email);
-        if (seller.error) {
+        if (null !== seller && seller.error) {
             return { error: seller.error };
         }
 

@@ -21,7 +21,7 @@ import { getConfiguration } from "../../configuration/configuration.js";
 
 export const signupSellerController = async (request, response) => {
     // logger.info(req);
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const plainTextPassword = (request?.body?.password);
     const email = request?.body?.email;
 
     let sellerExists = await checkIfSellerExistsService(email);
@@ -81,7 +81,7 @@ export const loginSellerController = async (request, response) => {
             "Password cannot be empty!"
         );
     }
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const plainTextPassword = (request?.body?.password);
     if (plainTextPassword.error) {
         return handleErrorResponseUtility(
             response,
@@ -224,7 +224,7 @@ export const updateSellerProfileController = async (request, response) => {
 
 export const updateSellerPasswordController = async (request, response) => {
     let email = request?.user?.email;
-    const plainTextPassword = decryptPasswordUtility(request?.body?.password);
+    const plainTextPassword = (request?.body?.password);
     try {
         const [hashedPassword, salt] = await createHashedPasswordUtility(
             plainTextPassword
