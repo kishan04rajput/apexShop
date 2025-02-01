@@ -2,7 +2,7 @@ import { getConfiguration } from "../../configuration/configuration.js";
 import { getUserCacheInstance } from "../../factory/cache.factory.js";
 
 const prefixUserInformation = "user:info:";
-const preFixUserCacheAcessToken = "user:jwt:token:Access";
+const preFixUserCacheAcessToken = "user:jwt:token:access";
 
 export const setUserInCache = async (user) => {
     const config = getConfiguration();
@@ -35,11 +35,7 @@ export const getUserFromCache = async (email) => {
     return user;
 };
 
-export const setAccessTokenInCacheUser = async (
-    email,
-    jti,
-    accessToken
-) => {
+export const setAccessTokenInCacheUser = async (email, jti, accessToken) => {
     const config = getConfiguration();
     const cacheKey = generateUserAccessTokenCacheKey(email, jti);
     let cacheClient = await getUserCacheInstance(config);

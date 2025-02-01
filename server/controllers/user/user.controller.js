@@ -123,12 +123,16 @@ export const loginUserController = async (request, response) => {
         );
     }
 
+    /*
+    put setAccessTokenInCacheUser in generateAccessAccessTokenSVC
+    */
     const [accessToken, accessTokenJti] = generateAccessTokenUtility(
         user._id,
         user.email,
         user.type,
         configuration.userAccessTokenSecretKey
     );
+
     const refreshToken = generateRefreshTokenUtility(
         user._id,
         user.email,

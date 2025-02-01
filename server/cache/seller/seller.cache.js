@@ -2,7 +2,7 @@ import { getConfiguration } from "../../configuration/configuration.js";
 import { getSellerCacheInstance } from "../../factory/cache.factory.js";
 
 const prefixSellerInformation = "seller:info:";
-const preFixSellerCacheAcessToken = "seller:jwt:token:Access";
+const preFixSellerCacheAcessToken = "seller:jwt:token:access";
 
 export const setSellerInCache = async (seller) => {
     const config = getConfiguration();

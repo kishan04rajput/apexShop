@@ -17,35 +17,48 @@ import {
 import { getConfiguration } from "../../configuration/configuration.js";
 
 export function sellerRoutes(router) {
-    const configuration = getConfiguration();
     const sellerRouter = express.Router();
 
-    sellerRouter.post(
+    publicSellerRoutes(sellerRouter);
+    protectedSellerRoutes(sellerRouter);
+
+    router.use("/seller", sellerRouter);
+}
+
+const publicSellerRoutes = (sellerRouter) => {
+    let publicSellerRouter = express.Router();
+    publicSellerRouter.post(
         "/signup",
         validateRequestMiddleware(signupValidationRulesUtility),
         signupSellerController
     );
-    sellerRouter.post(
+    publicSellerRouter.post(
         "/login",
         validateRequestMiddleware(loginValidationRulesUtility),
         loginSellerController
     );
-    sellerRouter.get(
-        "/profile/info",
-        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
-        getSellerDetailsController
-    );
-    sellerRouter.put(
+    sellerRouter.use("", publicSellerRouter);
+};
+
+const protectedSellerRoutes = (sellerRouter) => {
+    const configuration = getConfiguration();
+    let protectedSellerRouter = express.Router();
+
+    protectedSellerRouter.get("/profile/info", getSellerDetailsController);
+    protectedSellerRouter.put(
         "/profile/update",
         validateRequestMiddleware(updateProfileValidationRulesUtility),
-        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
         updateSellerProfileController
     );
-    sellerRouter.patch(
+
+    protectedSellerRouter.patch(
         "/updatepassword",
         validateRequestMiddleware(updatePasswordValidationRulesUtility),
-        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
         updateSellerPasswordController
     );
-    router.use("/seller", sellerRouter);
-}
+    sellerRouter.use(
+        "",
+        authenticationMiddleware(configuration.sellerAccessTokenSecretKey),
+        protectedSellerRouter
+    );
+};
