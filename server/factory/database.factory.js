@@ -17,6 +17,7 @@ export const setupDatabaseFactory = async (configuration) => {
 export const getUserMongoDatabaseInstance = async (configuration) => {
     // console.log("----->getUserMongoDatabaseInstance");
     if (!!databaseInstanceObject?.userDatabase) {
+        logger.info("User database hit!");
         return databaseInstanceObject.userDatabase;
     }
     let userDatabase = await connectToMongoDatabase(configuration.mongoUserUri);
@@ -25,11 +26,13 @@ export const getUserMongoDatabaseInstance = async (configuration) => {
         databaseInstanceObject.userDatabase = userDatabase;
         return userDatabase;
     }
+    logger.info("User database miss!");
     throw "User database connection error";
 };
 
 export const getSellerMongoDatabaseInstance = async (configuration) => {
     if (!!databaseInstanceObject?.sellerDatabase) {
+        logger.info("Seller database hit!");
         return databaseInstanceObject.sellerDatabase;
     }
     let sellerDatabase = await connectToMongoDatabase(
@@ -40,12 +43,14 @@ export const getSellerMongoDatabaseInstance = async (configuration) => {
         databaseInstanceObject.sellerDatabase = sellerDatabase;
         return sellerDatabase;
     }
+    logger.info("Seller database miss!");
 
     throw "Seller database connection error";
 };
 
 export const getAdminMongoDatabaseInstance = async (configuration) => {
     if (!!databaseInstanceObject?.adminDatabase) {
+        logger.info("Administrator database hit!");
         return databaseInstanceObject.adminDatabase;
     }
     let adminDatabase = await connectToMongoDatabase(
@@ -56,6 +61,7 @@ export const getAdminMongoDatabaseInstance = async (configuration) => {
         databaseInstanceObject.adminDatabase = adminDatabase;
         return adminDatabase;
     }
+    logger.info("Administrator database miss!");
 
     throw "Admin database connection error";
 };
@@ -64,6 +70,7 @@ export const getCustomerRelationshipMongoDatabaseInstance = async (
     configuration
 ) => {
     if (!!databaseInstanceObject?.customerRelationshipDatabase) {
+        logger.info("CustomerRelationship database hit!");
         return databaseInstanceObject.customerRelationshipDatabase;
     }
     let customerRelationshipDatabase = await connectToMongoDatabase(
@@ -75,6 +82,7 @@ export const getCustomerRelationshipMongoDatabaseInstance = async (
             customerRelationshipDatabase;
         return customerRelationshipDatabase;
     }
+    logger.info("CustomerRelationship database miss!");
 
     throw "Customer relationship database connection error";
 };

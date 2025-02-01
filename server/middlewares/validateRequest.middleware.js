@@ -10,16 +10,18 @@ export const validateRequestMiddleware = (validations) => {
             const plainTextPassword = decryptPasswordUtility(
                 request?.body?.password
             );
-            const passwordFollowsRules =
-                passwordRulesValidationUtility(plainTextPassword);
-            if (passwordFollowsRules.length > 0) {
-                return handleErrorResponseUtility(
-                    response,
-                    404,
-                    "failed",
-                    passwordFollowsRules
-                );
-            }
+            //password rules enforcement start
+            // const passwordFollowsRules =
+            //     passwordRulesValidationUtility(plainTextPassword);
+            // if (passwordFollowsRules.length > 0) {
+            //     return handleErrorResponseUtility(
+            //         response,
+            //         404,
+            //         "failed",
+            //         passwordFollowsRules
+            //     );
+            // }
+            // password rules enforement end
             request.body.password = plainTextPassword;
         }
         try {

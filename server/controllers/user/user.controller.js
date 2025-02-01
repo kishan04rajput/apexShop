@@ -124,8 +124,13 @@ export const loginUserController = async (request, response) => {
     }
 
     /*
-    put setAccessTokenInCacheUser in generateAccessAccessTokenSVC
+    put setAccessTokenInCacheUser in generateAccessTokenSVC
     */
+
+    /*
+
+    doubt:- agar svc banai to user ki alag banegi seller ki alag banegi but token to hum user, seller, cr, admin sab ke liye use kar rahe hai!
+     */
     const [accessToken, accessTokenJti] = generateAccessTokenUtility(
         user._id,
         user.email,
